@@ -1,26 +1,33 @@
 <!-- Start.svelte -->
 <script>
-  import Keyboard from './Keyboard.svelte';
-  import Rules from './Rules.svelte';
-  import { keys } from './keys.js';
-  import { createEventDispatcher } from 'svelte';
+  import Keyboard from "./Keyboard.svelte";
+  import Rules from "./Rules.svelte";
+  import { keys } from "./keys.js";
+  import { createEventDispatcher } from "svelte";
 
   export let timeInSeconds;
 
   const dispatch = createEventDispatcher();
 
   function startGame() {
-    dispatch('start');
+    dispatch("start");
   }
 </script>
 
-<style>
-  .start {
-    text-align: center;
-  }
+<div class="start">
+  <Keyboard {keys} />
+  <Rules {timeInSeconds} />
+  <div class="start-button-wrapper">
+    <button class="start-button" on:click={startGame}>Start Game</button>
+  </div>
+</div>
 
+<style>
+  .start-button-wrapper {
+    text-align: right;
+  }
   .start-button {
-    background-color: #4CAF50; /* Green */
+    background-color: #4caf50; /* Green */
     border: none;
     color: white;
     padding: 15px 32px;
@@ -33,10 +40,3 @@
     border-radius: 4px;
   }
 </style>
-
-<div class="start">
-  <h1>Keyboard Puzzle</h1>
-  <Keyboard keys="{keys}" />
-  <Rules {timeInSeconds} />
-  <button class="start-button" on:click="{startGame}">Start Game</button>
-</div>
