@@ -45,9 +45,7 @@ export function getTimeFromQuery(url) {
 }
 
 export function shareOnTwitter(score) {
-  const tweetText = `I scored ${score} points in the Keyboard Puzzle Game, built with ChatGPT! Can you beat my score? 🤔🎮 
-  built by @pyoner 
-  #keyboardpuzzlegame #chatgpt #ai #games`;
+  const tweetText = `I scored ${score} points in the Keyboard Puzzle Game, built with ChatGPT by @pyoner! Can you beat my score? 🤔🎮 #keyboardpuzzlegame #chatgpt #ai #games`;
   const tweetUrl = `https://keyboard-puzzle.vercel.app/`;
   const encodedText = encodeURIComponent(tweetText);
   const encodedUrl = encodeURIComponent(tweetUrl);
