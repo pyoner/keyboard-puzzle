@@ -3,6 +3,7 @@
   import Game from "./Game.svelte";
   import Result from "./Result.svelte";
   import About from "./About.svelte";
+  import { getTimeFromQuery } from "./helpers";
 
   let gameState = "start";
 
@@ -19,7 +20,7 @@
   let scores = 0;
   let swappedKeys = [];
 
-  const timeInSeconds = (1 / 4) * 60;
+  const timeInSeconds = getTimeFromQuery(window.location) || 3 * 60;
 </script>
 
 <div class="app-wrapper">

@@ -9,11 +9,11 @@ export function shuffle(array) {
 }
 
 export function maskLabel(obj) {
-  return { ...obj, label: obj.label.replace(/./g, '*') };
+  return { ...obj, label: obj.label.replace(/./g, "*") };
 }
 
 export function isMasked(key) {
-  return key.label.includes('*');
+  return key.label.includes("*");
 }
 
 export function countMatchingKeys(a, b) {
@@ -29,5 +29,17 @@ export function countMatchingKeys(a, b) {
 }
 
 export function copyKeys(keys) {
-  return keys.map(key => ({...key}));
+  return keys.map((key) => ({ ...key }));
+}
+
+export function getTimeFromQuery(url) {
+  const urlParams = new URLSearchParams(url.search);
+  const timeStr = urlParams.get("time");
+  let time;
+  try {
+    time = parseInt(timeStr, 10);
+  } catch (e) {
+    time = 0;
+  }
+  return time;
 }
