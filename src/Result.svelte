@@ -2,10 +2,10 @@
 <script>
   import Keyboard from "./Keyboard.svelte";
   import { keys } from "./keys.js";
-  import { isMasked } from "./helpers";
+  import { isMasked, shareOnTwitter } from "./helpers";
 
   export let swappedKeys = [];
-  export let scores = 0;
+  export let score = 0;
 
   // Create new array of keys with updated classNames
   const newKeys = keys.map((key, index) => {
@@ -25,15 +25,33 @@
 </script>
 
 <div class="result">
-  <div class="scores">
-    <p>Total Scores: {scores}</p>
-  </div>
+  <h2>Total Score: {score}</h2>
   <Keyboard keys={newKeys} />
+  <div class="wrapper">
+    <a href={shareOnTwitter(score)} target="_blank" rel="noopener noreferrer"
+      >Share on Twitter</a
+    >
+  </div>
 </div>
 
 <style>
-  .scores {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+  a {
+    margin-top: 0.5rem;
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    background-color: #1da1f2;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  a:hover {
+    background-color: #0c7fb7;
+  }
+
+  .wrapper {
+    display: flex;
+    justify-content: right;
   }
 </style>

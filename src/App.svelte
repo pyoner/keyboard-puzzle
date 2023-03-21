@@ -31,7 +31,7 @@
     {:else if gameState === "game"}
       <Game {timeInSeconds} on:end={handleEnd} />
     {:else if gameState === "result"}
-      <Result {scores} {swappedKeys} />
+      <Result score={scores} {swappedKeys} />
     {/if}
 
     <About />
