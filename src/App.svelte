@@ -22,17 +22,19 @@
   const timeInSeconds = (1 / 4) * 60;
 </script>
 
-<div class="app">
-  <h1>Keyboard Puzzle</h1>
-  {#if gameState === "start"}
-    <Start {timeInSeconds} on:start={handleStart} />
-  {:else if gameState === "game"}
-    <Game {timeInSeconds} on:end={handleEnd} />
-  {:else if gameState === "result"}
-    <Result {scores} {swappedKeys} />
-  {/if}
+<div class="app-wrapper">
+  <div class="app">
+    <h1>Keyboard Puzzle</h1>
+    {#if gameState === "start"}
+      <Start {timeInSeconds} on:start={handleStart} />
+    {:else if gameState === "game"}
+      <Game {timeInSeconds} on:end={handleEnd} />
+    {:else if gameState === "result"}
+      <Result {scores} {swappedKeys} />
+    {/if}
 
-  <About />
+    <About />
+  </div>
 </div>
 
 <style>
@@ -40,5 +42,9 @@
     max-width: min-content;
     margin: 1rem;
     padding: 1rem;
+  }
+  .app-wrapper {
+    display: flex;
+    justify-content: center;
   }
 </style>
