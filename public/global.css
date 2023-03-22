@@ -1,6 +1,9 @@
+html {
+	margin: auto;
+}
 html, body {
 	position: relative;
-	width: 100%;
+	width: max-content;
 	height: 100%;
 }
 

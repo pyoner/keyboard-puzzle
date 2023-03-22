@@ -23,7 +23,7 @@
   const timeInSeconds = getTimeFromQuery(window.location) || 3 * 60;
 </script>
 
-<div class="app-wrapper">
+<div class="container">
   <div class="app">
     <h1>Keyboard Puzzle</h1>
     {#if gameState === "start"}
@@ -44,7 +44,7 @@
     margin: 1rem;
     padding: 1rem;
   }
-  .app-wrapper {
+  .container {
     display: flex;
     justify-content: center;
   }
