@@ -1,51 +1,51 @@
-<script>
-  import Start from "./Start.svelte";
-  import Game from "./Game.svelte";
-  import Result from "./Result.svelte";
-  import About from "./About.svelte";
-  import { getTimeFromQuery } from "./helpers";
+<script lang="ts">
+	import Start from './Start.svelte';
+	import Game from './Game.svelte';
+	import Result from './Result.svelte';
+	import About from './About.svelte';
+	import { getTimeFromQuery } from '../helpers';
 
-  let gameState = "start";
+	let gameState = $state('start');
 
-  function handleStart() {
-    gameState = "game";
-  }
+	function handleStart() {
+		gameState = 'game';
+	}
 
-  function handleEnd(event) {
-    gameState = "result";
-    scores = event.detail.scores;
-    swappedKeys = event.detail.swappedKeys;
-  }
+	function handleEnd(event) {
+		gameState = 'result';
+		scores = event.detail.scores;
+		swappedKeys = event.detail.swappedKeys;
+	}
 
-  let scores = 0;
-  let swappedKeys = [];
+	let scores = $state(0);
+	let swappedKeys = $state([]);
 
-  const timeInSeconds = getTimeFromQuery(window.location) || 3 * 60;
+	const timeInSeconds = getTimeFromQuery(window.location) || 3 * 60;
 </script>
 
 <div class="container">
-  <div class="app">
-    <h1>Keyboard Puzzle</h1>
-    {#if gameState === "start"}
-      <Start {timeInSeconds} on:start={handleStart} />
-    {:else if gameState === "game"}
-      <Game {timeInSeconds} on:end={handleEnd} />
-    {:else if gameState === "result"}
-      <Result score={scores} {swappedKeys} />
-    {/if}
+	<div class="app">
+		<h1>Keyboard Puzzle</h1>
+		{#if gameState === 'start'}
+			<Start {timeInSeconds} on:start={handleStart} />
+		{:else if gameState === 'game'}
+			<Game {timeInSeconds} on:end={handleEnd} />
+		{:else if gameState === 'result'}
+			<Result score={scores} {swappedKeys} />
+		{/if}
 
-    <About />
-  </div>
+		<About />
+	</div>
 </div>
 
 <style>
-  .app {
-    max-width: min-content;
-    margin: 1rem;
-    padding: 1rem;
-  }
-  .container {
-    display: flex;
-    justify-content: center;
-  }
+	.app {
+		max-width: min-content;
+		margin: 1rem;
+		padding: 1rem;
+	}
+	.container {
+		display: flex;
+		justify-content: center;
+	}
 </style>

@@ -1,64 +1,59 @@
-<script>
-  import { createEventDispatcher } from "svelte";
+<script lang="ts">
+	import { run } from 'svelte/legacy';
 
-  import Keyboard from "./Keyboard.svelte";
-  import ShuffledButtons from "./ShuffledButtons.svelte";
-  import Countdown from "./Countdown.svelte";
-  import { keys } from "./keys.js";
-  import {
-    maskLabel,
-    isMasked,
-    shuffle,
-    countMatchingKeys,
-    copyKeys,
-  } from "./helpers";
+	import { createEventDispatcher } from 'svelte';
 
-  export let timeInSeconds;
+	import Keyboard from './Keyboard.svelte';
+	import ShuffledButtons from './ShuffledButtons.svelte';
+	import Countdown from './Countdown.svelte';
+	import { keys } from '$lib/keys';
+	import { maskLabel, isMasked, shuffle, countMatchingKeys, copyKeys } from '$lib/helpers';
 
-  const dispatch = createEventDispatcher();
+	let { timeInSeconds } = $props();
 
-  let maskedKeys = keys.map(maskLabel);
-  let shuffledKeys = copyKeys(shuffle(keys));
+	const dispatch = createEventDispatcher();
 
-  let scores = 0;
-  let gameEnded = false;
-  $: scores = countMatchingKeys(keys, maskedKeys);
+	let maskedKeys = $state(keys.map(maskLabel));
+	let shuffledKeys = $state(copyKeys(shuffle(keys)));
 
-  let selected = null;
-  function handleShuffledButtonClick(key) {
-    console.log("shuffled button", key);
-    selected = key;
-  }
+	let scores = $state(0);
+	let gameEnded = false;
+	run(() => {
+		scores = countMatchingKeys(keys, maskedKeys);
+	});
 
-  function handleMaskedButtonClick(key) {
-    console.log("masked button", key);
+	let selected = null;
+	function handleShuffledButtonClick(key) {
+		console.log('shuffled button', key);
+		selected = key;
+	}
 
-    if (selected && isMasked(key)) {
-      maskedKeys[key.id] = { ...selected };
-      selected.disabled = true;
-      selected = null;
-      shuffledKeys = [...shuffledKeys];
-    }
-  }
+	function handleMaskedButtonClick(key) {
+		console.log('masked button', key);
 
-  function handleCountdownEnd() {
-    gameEnded = true;
-    console.log("Game has ended");
-    dispatch("end", {
-      scores,
-      swappedKeys: maskedKeys,
-    });
-  }
+		if (selected && isMasked(key)) {
+			maskedKeys[key.id] = { ...selected };
+			selected.disabled = true;
+			selected = null;
+			shuffledKeys = [...shuffledKeys];
+		}
+	}
+
+	function handleCountdownEnd() {
+		gameEnded = true;
+		console.log('Game has ended');
+		dispatch('end', {
+			scores,
+			swappedKeys: maskedKeys
+		});
+	}
 </script>
 
 <div>
-  <Countdown {timeInSeconds} on:end={handleCountdownEnd}>
-    <p>scores: {scores} pts</p>
-  </Countdown>
+	<Countdown {timeInSeconds} on:end={handleCountdownEnd}>
+		<p>scores: {scores} pts</p>
+	</Countdown>
 
-  <Keyboard keys={maskedKeys} onButtonClick={handleMaskedButtonClick} />
-  <ShuffledButtons
-    keys={shuffledKeys}
-    onButtonClick={handleShuffledButtonClick}
-  />
+	<Keyboard keys={maskedKeys} onButtonClick={handleMaskedButtonClick} />
+	<ShuffledButtons keys={shuffledKeys} onButtonClick={handleShuffledButtonClick} />
 </div>

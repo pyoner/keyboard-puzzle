@@ -1,30 +1,35 @@
-<script>
-  import { onMount, createEventDispatcher } from 'svelte';
+<script lang="ts">
+	import { onMount, createEventDispatcher } from 'svelte';
 
-  export let timeInSeconds = 0;
-  let remainingTime = timeInSeconds;
-  let showChildren = false;
-  const dispatch = createEventDispatcher();
+	interface Props {
+		timeInSeconds?: number;
+		children?: import('svelte').Snippet;
+	}
 
-  onMount(() => {
-    const countdownInterval = setInterval(() => {
-      if (remainingTime > 0) {
-        remainingTime--;
-      } else {
-        clearInterval(countdownInterval);
-        showChildren = true;
-        dispatch('end');
-      }
-    }, 1000);
+	let { timeInSeconds = 0, children }: Props = $props();
+	let remainingTime = $state(timeInSeconds);
+	let showChildren = $state(false);
+	const dispatch = createEventDispatcher();
 
-    return () => {
-      clearInterval(countdownInterval);
-    };
-  });
+	onMount(() => {
+		const countdownInterval = setInterval(() => {
+			if (remainingTime > 0) {
+				remainingTime--;
+			} else {
+				clearInterval(countdownInterval);
+				showChildren = true;
+				dispatch('end');
+			}
+		}, 1000);
+
+		return () => {
+			clearInterval(countdownInterval);
+		};
+	});
 </script>
 
 {#if !showChildren}
-  <p>Time remaining: {remainingTime}s</p>
+	<p>Time remaining: {remainingTime}s</p>
 {:else}
-  <slot></slot>
+	{@render children?.()}
 {/if}

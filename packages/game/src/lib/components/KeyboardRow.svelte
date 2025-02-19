@@ -1,28 +1,26 @@
 <!-- KeyboardRow.svelte -->
-<script>
-  import KeyboardButton from './KeyboardButton.svelte';
+<script lang="ts">
+	import type { Key } from '$lib/types';
+	import KeyboardButton from './KeyboardButton.svelte';
 
-  export let keys = [];
-  export let onButtonClick = () => {};
+	let { keys, onButtonClick }: { keys: Key[]; onButtonClick: (label: Key['label']) => void } =
+		$props();
 
-  function handleButtonClick(buttonLabel) {
-    onButtonClick(buttonLabel);
-  }
+	function handleButtonClick(buttonLabel: Key['label']) {
+		onButtonClick(buttonLabel);
+	}
 </script>
 
-<style>
-  .row {
-    display: flex;
-    justify-content: center;
-    gap: 5px;
-  }
-</style>
-
 <div class="row">
-  {#each keys as key}
-    <KeyboardButton
-      key="{key}"
-      onClick="{handleButtonClick}"
-    />
-  {/each}
+	{#each keys as key}
+		<KeyboardButton {key} onClick={handleButtonClick} />
+	{/each}
 </div>
+
+<style>
+	.row {
+		display: flex;
+		justify-content: center;
+		gap: 5px;
+	}
+</style>
