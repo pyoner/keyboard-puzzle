@@ -23,7 +23,7 @@
 	let swappedKeys = $state<Key[]>([]);
 	let timeInSeconds = $state(3 * 60);
 	onMount(() => {
-		timeInSeconds = getTimeFromQuery(window.location) || 3 * 60;
+		timeInSeconds = getTimeFromQuery(window.location) || timeInSeconds;
 	});
 </script>
 
