@@ -3,14 +3,15 @@
 	import Keyboard from './Keyboard.svelte';
 	import Rules from './Rules.svelte';
 	import { keys } from '$lib/keys';
-	import { createEventDispatcher } from 'svelte';
 
-	let { timeInSeconds } = $props();
-
-	const dispatch = createEventDispatcher();
+	type Props = {
+		timeInSeconds: number;
+		start: () => void;
+	};
+	let { timeInSeconds, start }: Props = $props();
 
 	function startGame() {
-		dispatch('start');
+		start();
 	}
 </script>
 

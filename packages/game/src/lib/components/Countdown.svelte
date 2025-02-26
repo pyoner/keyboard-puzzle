@@ -1,15 +1,15 @@
 <script lang="ts">
-	import { onMount, createEventDispatcher } from 'svelte';
+	import { onMount } from 'svelte';
 
 	interface Props {
 		timeInSeconds?: number;
 		children?: import('svelte').Snippet;
+		end: () => void;
 	}
 
-	let { timeInSeconds = 0, children }: Props = $props();
+	let { timeInSeconds = 0, children, end }: Props = $props();
 	let remainingTime = $state(timeInSeconds);
 	let showChildren = $state(false);
-	const dispatch = createEventDispatcher();
 
 	onMount(() => {
 		const countdownInterval = setInterval(() => {
@@ -18,7 +18,7 @@
 			} else {
 				clearInterval(countdownInterval);
 				showChildren = true;
-				dispatch('end');
+				end();
 			}
 		}, 1000);
 

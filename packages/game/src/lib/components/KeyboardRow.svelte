@@ -3,17 +3,12 @@
 	import type { Key } from '$lib/types';
 	import KeyboardButton from './KeyboardButton.svelte';
 
-	let { keys, onButtonClick }: { keys: Key[]; onButtonClick: (label: Key['label']) => void } =
-		$props();
-
-	function handleButtonClick(buttonLabel: Key['label']) {
-		onButtonClick(buttonLabel);
-	}
+	let { keys, onClick }: { keys: Key[]; onClick: (key: Key) => void } = $props();
 </script>
 
 <div class="row">
 	{#each keys as key}
-		<KeyboardButton {key} onClick={handleButtonClick} />
+		<KeyboardButton {key} {onClick} />
 	{/each}
 </div>
 
