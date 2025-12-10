@@ -1,7 +1,12 @@
 <!-- KeyboardButton.svlete -->
 <script lang="ts">
 	import type { Key } from '$lib/types';
-	let { key, onClick }: { key: Key; onClick: (k: Key) => void } = $props();
+
+	type Props = {
+		key: Key;
+		onClick: (k: Key) => void;
+	};
+	let { key, onClick }: Props = $props();
 
 	function handleClick() {
 		if (!key.disabled) {

@@ -3,7 +3,7 @@
 	import { maskLabel, isMasked, shuffle, countMatchingKeys, copyKeys } from '$lib/helpers';
 	import { keys } from '$lib/keys';
 
-	import Keyboard from './Keyboard.svelte';
+	import Keyboard from './keyboard/Keyboard.svelte';
 	import ShuffledButtons from './ShuffledButtons.svelte';
 	import Countdown from './Countdown.svelte';
 
@@ -51,5 +51,5 @@
 	</Countdown>
 
 	<Keyboard keys={maskedKeys} onClick={handleMaskedButtonClick} />
-	<ShuffledButtons keys={shuffledKeys} onButtonClick={handleShuffledButtonClick} />
+	<ShuffledButtons keys={shuffledKeys} onClick={handleShuffledButtonClick} />
 </div>

@@ -1,10 +1,15 @@
 <!-- ShuffledButtons.svelte -->
 <script lang="ts">
-	import KeyboardButton from './KeyboardButton.svelte';
+	import type { Key } from '$lib/types';
+	import KeyboardButton from './keyboard/Button.svelte';
 
-	let { keys = [], onButtonClick = () => {} } = $props();
+	type Props = {
+		keys: Key[];
+		onClick: (key: Key) => void;
+	};
+	let { keys = [], onClick: onButtonClick = () => {} }: Props = $props();
 
-	function handleButtonClick(key) {
+	function handleButtonClick(key: Key) {
 		onButtonClick(key);
 	}
 </script>

@@ -1,14 +1,18 @@
 <!-- KeyboardRow.svelte -->
 <script lang="ts">
 	import type { Key } from '$lib/types';
-	import KeyboardButton from './KeyboardButton.svelte';
+	import Button from './Button.svelte';
 
-	let { keys, onClick }: { keys: Key[]; onClick: (key: Key) => void } = $props();
+	type Props = {
+		keys: Key[];
+		onClick: (key: Key) => void;
+	};
+	let { keys, onClick }: Props = $props();
 </script>
 
 <div class="row">
 	{#each keys as key}
-		<KeyboardButton {key} {onClick} />
+		<Button {key} {onClick} />
 	{/each}
 </div>
 

@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	interface Props {
+	type Props = {
 		timeInSeconds?: number;
 		children?: import('svelte').Snippet;
 		end: () => void;
-	}
+	};
 
 	let { timeInSeconds = 0, children, end }: Props = $props();
 	let remainingTime = $state(timeInSeconds);

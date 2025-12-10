@@ -4,7 +4,7 @@
 	import { keys } from '$lib/keys';
 	import { isMasked, shareOnTwitter } from '$lib/helpers';
 
-	import Keyboard from './Keyboard.svelte';
+	import Keyboard from './keyboard/Keyboard.svelte';
 
 	interface Props {
 		swappedKeys?: Key[];

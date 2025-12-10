@@ -1,8 +1,9 @@
 <!-- Start.svelte -->
 <script lang="ts">
-	import Keyboard from './Keyboard.svelte';
-	import Rules from './Rules.svelte';
 	import { keys } from '$lib/keys';
+
+	import Keyboard from './keyboard/Keyboard.svelte';
+	import Rules from './Rules.svelte';
 
 	type Props = {
 		timeInSeconds: number;
