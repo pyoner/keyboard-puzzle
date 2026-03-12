@@ -4,9 +4,10 @@
 
 	type Props = {
 		key: Key;
+		selected?: boolean;
 		onClick: (k: Key) => void;
 	};
-	let { key, onClick }: Props = $props();
+	let { key, selected = false, onClick }: Props = $props();
 
 	function handleClick() {
 		if (!key.disabled) {
@@ -16,7 +17,8 @@
 </script>
 
 <button
-	class={`btn ${key.classNames} ${key.disabled ? 'btn-disabled opacity-50' : ''}`}
+	class={`btn ${key.classNames} ${selected ? 'btn-primary' : ''}`}
+	disabled={key.disabled}
 	onclick={handleClick}
 >
 	{key.label}

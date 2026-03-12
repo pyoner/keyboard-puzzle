@@ -17,12 +17,6 @@
 
 <div class="mx-auto flex flex-wrap justify-center gap-1 p-4">
 	{#each keys as key (key.id)}
-		<KeyboardButton
-			key={{
-				...key,
-				classNames: selected?.id === key.id ? `btn-primary ${key.classNames}` : key.classNames
-			}}
-			onClick={handleButtonClick}
-		/>
+		<KeyboardButton {key} selected={selected?.id === key.id} onClick={handleButtonClick} />
 	{/each}
 </div>

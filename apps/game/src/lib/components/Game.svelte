@@ -29,9 +29,8 @@
 
 		if (selected && isMasked(key)) {
 			maskedKeys[key.id] = { ...selected };
-			selected.disabled = true;
+			shuffledKeys = shuffledKeys.filter((k) => k.id !== selected!.id);
 			selected = null;
-			shuffledKeys = [...shuffledKeys];
 		}
 	}
 
