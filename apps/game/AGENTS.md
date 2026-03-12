@@ -8,7 +8,7 @@
 - **Runtime**: Cloudflare Workers
 - **Database**: Drizzle ORM with libSQL
 - **Testing**: Vitest + Playwright
-- **Styling**: Tailwind CSS v4
+- **Styling**: Tailwind CSS v4 + daisyUI v5
 
 ---
 
@@ -79,6 +79,12 @@ bun run cf-typegen     # Generate Cloudflare types
 - Uses Tailwind CSS v4 via `@tailwindcss/vite`
 - Import in `src/routes/layout.css`: `@import "tailwindcss"`
 - Use `prettier-plugin-tailwindcss` for class sorting
+
+### daisyUI
+- Uses daisyUI v5 via `@plugin "daisyui"`
+- Configured with system theme: `light` (default) and `dark` (auto via `prefers-color-scheme`)
+- Use component classes: `btn`, `card`, `input`, `modal`, `dropdown`, etc.
+- Example: `<button class="btn btn-primary">Click</button>`
 
 ---
 
