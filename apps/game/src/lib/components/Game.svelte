@@ -28,7 +28,8 @@
 		console.log('masked button', key);
 
 		if (selected && isMasked(key)) {
-			maskedKeys[key.id] = { ...selected };
+			// Preserve the original key.id to prevent Svelte from breaking keyed each loops
+			maskedKeys[key.id] = { ...selected, id: key.id };
 			shuffledKeys = shuffledKeys.filter((k) => k.id !== selected!.id);
 			selected = null;
 		}
