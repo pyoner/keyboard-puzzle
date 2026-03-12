@@ -27,7 +27,7 @@
 	function handleMaskedButtonClick(key: Key) {
 		console.log('masked button', key);
 
-		if (selected && isMasked(key)) {
+		if (selected && isMasked(key) && selected.type === key.type) {
 			// Preserve the original key.id to prevent Svelte from breaking keyed each loops
 			maskedKeys[key.id] = { ...selected, id: key.id };
 			shuffledKeys = shuffledKeys.map((k) =>
