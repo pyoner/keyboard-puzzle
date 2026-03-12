@@ -28,13 +28,20 @@
 	});
 </script>
 
-<div class="flex flex-col gap-4">
-	<h2 class="text-2xl font-bold">Total Score: {score}</h2>
+<div class="flex flex-col gap-6 pt-4">
+	<div class="text-center">
+		<h2 class="mb-2 text-4xl font-extrabold text-primary">Game Over</h2>
+		<p class="text-2xl font-semibold">Total Score: {score}</p>
+	</div>
 	<Keyboard keys={newKeys} />
-	<div class="flex justify-end">
-		<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-		<a href={shareOnTwitter(score)} class="btn btn-info" target="_blank" rel="noopener noreferrer"
-			>Share on Twitter</a
+	<div class="mt-4 flex justify-center">
+		<!-- eslint-disable svelte/no-navigation-without-resolve -->
+		<a
+			href={shareOnTwitter(score)}
+			class="btn btn-lg btn-info"
+			target="_blank"
+			rel="noopener noreferrer">Share on Twitter</a
 		>
+		<!-- eslint-enable svelte/no-navigation-without-resolve -->
 	</div>
 </div>
