@@ -6,3 +6,15 @@
 }
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
+
+@layer components {
+	.key {
+		@apply h-10 w-10 p-0 sm:h-12 sm:w-12 md:h-14 md:w-14;
+	}
+	.key-wide {
+		@apply h-10 w-16 px-1 sm:h-12 sm:w-20 sm:px-2 md:h-14 md:w-24;
+	}
+	.key-extra-wide {
+		@apply h-10 w-48 px-1 sm:h-12 sm:w-64 sm:px-2 md:h-14 md:w-80;
+	}
+}

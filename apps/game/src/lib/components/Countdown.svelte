@@ -29,7 +29,12 @@
 </script>
 
 {#if !showChildren}
-	<p>Time remaining: {remainingTime}s</p>
+	<div class="mb-4 flex flex-col items-center">
+		<span class="countdown font-mono text-5xl">
+			<span style="--value:{remainingTime};"></span>
+		</span>
+		<span class="text-sm font-semibold opacity-70">seconds remaining</span>
+	</div>
 {:else}
 	{@render children?.()}
 {/if}

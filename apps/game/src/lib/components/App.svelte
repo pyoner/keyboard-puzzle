@@ -27,9 +27,9 @@
 	});
 </script>
 
-<div class="flex justify-center">
-	<div class="max-w-none">
-		<h1 class="mb-4 text-center text-3xl font-bold">Keyboard Puzzle</h1>
+<div class="container mx-auto max-w-5xl px-4 py-8">
+	<div class="w-full">
+		<h1 class="mb-8 text-center text-4xl font-bold text-primary">Keyboard Puzzle</h1>
 		{#if gameState === 'start'}
 			<Start {timeInSeconds} start={handleStart} />
 		{:else if gameState === 'game'}

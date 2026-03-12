@@ -16,7 +16,7 @@
 </script>
 
 <button
-	class={`btn btn-lg ${key.classNames} ${key.disabled ? 'btn-disabled' : ''}`}
+	class={`btn ${key.classNames} ${key.disabled ? 'btn-disabled opacity-50' : ''}`}
 	onclick={handleClick}
 >
 	{key.label}

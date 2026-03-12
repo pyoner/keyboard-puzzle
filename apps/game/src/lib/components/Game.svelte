@@ -18,7 +18,7 @@
 
 	let scores = $state(0);
 
-	let selected: Key | null = null;
+	let selected = $state<Key | null>(null);
 	function handleShuffledButtonClick(key: Key) {
 		console.log('shuffled button', key);
 		selected = key;
@@ -51,5 +51,5 @@
 	</Countdown>
 
 	<Keyboard keys={maskedKeys} onClick={handleMaskedButtonClick} />
-	<ShuffledButtons keys={shuffledKeys} onClick={handleShuffledButtonClick} />
+	<ShuffledButtons keys={shuffledKeys} onClick={handleShuffledButtonClick} {selected} />
 </div>

@@ -5,9 +5,10 @@
 
 	type Props = {
 		keys: Key[];
+		selected?: Key | null;
 		onClick: (key: Key) => void;
 	};
-	let { keys = [], onClick: onButtonClick = () => {} }: Props = $props();
+	let { keys = [], selected = null, onClick: onButtonClick = () => {} }: Props = $props();
 
 	function handleButtonClick(key: Key) {
 		onButtonClick(key);
@@ -16,6 +17,12 @@
 
 <div class="mx-auto flex flex-wrap justify-center gap-1 p-4">
 	{#each keys as key (key.id)}
-		<KeyboardButton {key} onClick={handleButtonClick} />
+		<KeyboardButton
+			key={{
+				...key,
+				classNames: selected?.id === key.id ? `btn-primary ${key.classNames}` : key.classNames
+			}}
+			onClick={handleButtonClick}
+		/>
 	{/each}
 </div>
