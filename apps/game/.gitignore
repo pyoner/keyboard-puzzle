@@ -21,9 +21,12 @@ Thumbs.db
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
-
+# Playwright
+test-results
+# Cloudflare Types
+/worker-configuration.d.ts
 # SQLite
 *.db
-# Cloudflare
+
 .dev.vars*
 !.dev.vars.example
