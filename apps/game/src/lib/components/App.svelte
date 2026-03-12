@@ -27,9 +27,9 @@
 	});
 </script>
 
-<div class="container">
-	<div class="app">
-		<h1>Keyboard Puzzle</h1>
+<div class="flex justify-center">
+	<div class="max-w-none">
+		<h1 class="mb-4 text-center text-3xl font-bold">Keyboard Puzzle</h1>
 		{#if gameState === 'start'}
 			<Start {timeInSeconds} start={handleStart} />
 		{:else if gameState === 'game'}
@@ -41,15 +41,3 @@
 		<About />
 	</div>
 </div>
-
-<style>
-	.app {
-		max-width: min-content;
-		margin: 1rem;
-		padding: 1rem;
-	}
-	.container {
-		display: flex;
-		justify-content: center;
-	}
-</style>

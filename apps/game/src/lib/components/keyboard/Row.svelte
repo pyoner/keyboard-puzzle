@@ -10,16 +10,8 @@
 	let { keys, onClick }: Props = $props();
 </script>
 
-<div class="row">
-	{#each keys as key}
+<div class="flex justify-center gap-1">
+	{#each keys as key (key.id)}
 		<Button {key} {onClick} />
 	{/each}
 </div>
-
-<style>
-	.row {
-		display: flex;
-		justify-content: center;
-		gap: 5px;
-	}
-</style>
