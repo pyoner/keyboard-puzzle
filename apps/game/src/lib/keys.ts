@@ -1,4 +1,4 @@
-import type { Key } from './types';
+import type { Key } from './game/types';
 
 export const keys: Key[] = [
 	// Row 1

@@ -1,7 +1,13 @@
 <script lang="ts">
-	import type { Key } from '$lib/types';
-	import { maskLabel, isMasked, shuffle, countMatchingKeys, copyKeys } from '$lib/helpers';
+	import type { Key } from '$lib/game';
 	import { keys } from '$lib/keys';
+	import {
+		createInitialState,
+		getPlacedCount,
+		handleShuffledButtonClick,
+		handleMaskedButtonClick,
+		endGame
+	} from '$lib/game';
 
 	import Keyboard from './keyboard/Keyboard.svelte';
 	import ShuffledButtons from './ShuffledButtons.svelte';
@@ -14,50 +20,24 @@
 	};
 	let { timeInSeconds, showHints, end }: Props = $props();
 
-	let maskedKeys = $state(keys.map(maskLabel));
-	let shuffledKeys = $state(copyKeys(shuffle(keys)));
+	let gameState = $state(createInitialState());
 
-	let scores = $state(0);
-	let placedCount = $derived(maskedKeys.filter((k) => !isMasked(k)).length);
+	let placedCount = $derived(getPlacedCount(gameState.maskedKeys));
 
-	let selected = $state<Key | null>(null);
-	function handleShuffledButtonClick(key: Key) {
-		if (key.disabled) return;
-		selected = key;
+	function onShuffledButtonClick(key: Key) {
+		gameState = handleShuffledButtonClick(gameState, key);
 	}
 
-	function handleMaskedButtonClick(key: Key) {
-		// If clicking a filled slot, return it to the tray (Undo)
-		if (!isMasked(key)) {
-			const originalKey = keys[key.id];
-			if (!originalKey) return;
-
-			// Mark the key as enabled in the tray using the sourceId (if available)
-			const idToEnable = key.sourceId ?? key.id;
-			shuffledKeys = shuffledKeys.map((k) => (k.id === idToEnable ? { ...k, disabled: false } : k));
-
-			// Re-mask the slot
-			maskedKeys[key.id] = maskLabel(originalKey);
-			return;
-		}
-
-		// If a key is selected and matches the slot type, place it
-		if (selected && selected.type === key.type) {
-			// Preserve the original key.id to prevent Svelte from breaking keyed each loops
-			// but store the selected key's original ID as sourceId for undo functionality
-			maskedKeys[key.id] = { ...selected, id: key.id, sourceId: selected.id };
-			shuffledKeys = shuffledKeys.map((k) =>
-				k.id === selected!.id ? { ...k, disabled: true } : k
-			);
-			selected = null;
-		}
+	function onMaskedButtonClick(key: Key) {
+		gameState = handleMaskedButtonClick(gameState, key);
 	}
 
-	function handleCountdownEnd() {
-		scores = countMatchingKeys(keys, maskedKeys);
+	function onCountdownEnd() {
+		const result = endGame(gameState);
+		gameState = { ...gameState, isGameOver: true, scores: result.scores };
 		end({
-			scores,
-			swappedKeys: maskedKeys
+			scores: result.scores,
+			swappedKeys: result.swappedKeys
 		});
 	}
 </script>
@@ -68,7 +48,7 @@
 		<div class="stat place-items-center">
 			<div class="stat-title">Time Left</div>
 			<div class="stat-value text-primary">
-				<Countdown {timeInSeconds} end={handleCountdownEnd} />
+				<Countdown {timeInSeconds} end={onCountdownEnd} />
 			</div>
 		</div>
 
@@ -81,7 +61,7 @@
 		<div class="stat place-items-center">
 			<div class="stat-title">Current Match</div>
 			<div class="stat-value text-secondary">
-				{selected ? selected.label : '--'}
+				{gameState.selected ? gameState.selected.label : '--'}
 			</div>
 			<div class="stat-desc">Selected Key</div>
 		</div>
@@ -94,9 +74,9 @@
 				Keyboard Plate
 			</h2>
 			<Keyboard
-				keys={maskedKeys}
-				onClick={handleMaskedButtonClick}
-				selectedType={showHints ? selected?.type : null}
+				keys={gameState.maskedKeys}
+				onClick={onMaskedButtonClick}
+				selectedType={showHints ? gameState.selected?.type : null}
 			/>
 		</div>
 	</div>
@@ -106,14 +86,21 @@
 		<div class="card-body p-4">
 			<div class="mb-2 flex items-center justify-between">
 				<h2 class="card-title text-sm tracking-widest uppercase opacity-50">Your Key Tray</h2>
-				{#if selected}
-					<button class="btn text-error btn-ghost btn-xs" onclick={() => (selected = null)}>
+				{#if gameState.selected}
+					<button
+						class="btn text-error btn-ghost btn-xs"
+						onclick={() => (gameState = { ...gameState, selected: null })}
+					>
 						Deselect
 					</button>
 				{/if}
 			</div>
 			<div class="max-h-64 overflow-y-auto">
-				<ShuffledButtons keys={shuffledKeys} onClick={handleShuffledButtonClick} {selected} />
+				<ShuffledButtons
+					keys={gameState.shuffledKeys}
+					onClick={onShuffledButtonClick}
+					selected={gameState.selected}
+				/>
 			</div>
 		</div>
 	</div>
