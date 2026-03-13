@@ -25,7 +25,7 @@
 
 @layer components {
 	.key-base {
-		@apply flex h-[var(--key-u)] items-center justify-center p-0;
+		@apply flex h-[calc(var(--key-u)-0.25rem)] items-center justify-center p-0;
 	}
 	.key-pad {
 		@apply px-1 sm:px-2;
@@ -33,26 +33,26 @@
 }
 
 .key-1u {
-	width: var(--key-u);
+	width: calc(var(--key-u) - 0.25rem);
 }
 .key-1-25u {
-	width: calc(var(--key-u) * 1.25);
+	width: calc(var(--key-u) * 1.25 - 0.25rem);
 }
 .key-1-5u {
-	width: calc(var(--key-u) * 1.5);
+	width: calc(var(--key-u) * 1.5 - 0.25rem);
 }
 .key-1-75u {
-	width: calc(var(--key-u) * 1.75);
+	width: calc(var(--key-u) * 1.75 - 0.25rem);
 }
 .key-2u {
-	width: calc(var(--key-u) * 2);
+	width: calc(var(--key-u) * 2 - 0.25rem);
 }
 .key-2-25u {
-	width: calc(var(--key-u) * 2.25);
+	width: calc(var(--key-u) * 2.25 - 0.25rem);
 }
 .key-2-75u {
-	width: calc(var(--key-u) * 2.75);
+	width: calc(var(--key-u) * 2.75 - 0.25rem);
 }
 .key-6-25u {
-	width: calc(var(--key-u) * 6.25);
+	width: calc(var(--key-u) * 6.25 - 0.25rem);
 }
