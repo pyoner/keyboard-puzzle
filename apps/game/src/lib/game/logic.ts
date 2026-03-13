@@ -5,23 +5,11 @@ export function shuffle<T>(array: T[]): T[] {
 	return array.toSorted(() => Math.random() - 0.5);
 }
 
-export function maskLabel(key: Key): Key {
-	return { ...key, label: '*'.repeat(key.label.length) };
-}
-
-export function copyKeys(keys: Key[]): Key[] {
-	return keys.map((key) => ({ ...key }));
-}
-
-export function isMasked(key: { label: string | string[] }): boolean {
-	return key.label.includes('*');
-}
-
-export function countMatchingKeys(original: Key[], placed: Key[]): number {
+export function countMatchingKeys(board: (Key | null)[], original: Key[]): number {
 	return original.reduce((count, orig, i) => {
-		const key = placed[i];
+		const placed = board[i];
 		const matched =
-			key?.sourceId === orig.id || (orig.pairId !== undefined && key?.sourceId === orig.pairId);
+			placed?.id === orig.id || (orig.pairId !== undefined && placed?.id === orig.pairId);
 		return count + (matched ? 1 : 0);
 	}, 0);
 }
@@ -29,50 +17,58 @@ export function countMatchingKeys(original: Key[], placed: Key[]): number {
 export function createInitialState(): GameState {
 	const shuffled = shuffle(originalKeys);
 	return {
-		maskedKeys: originalKeys.map(maskLabel),
-		shuffledKeys: shuffled.map((k) => ({ ...k })),
-		scores: 0,
+		board: originalKeys.map(() => null),
+		tray: shuffled,
 		selected: null,
+		scores: 0,
 		isGameOver: false
 	};
 }
 
-export function getPlacedCount(keys: Key[]): number {
-	return keys.filter((k) => !k.label.includes('*')).length;
+export function getPlacedCount(board: (Key | null)[]): number {
+	return board.filter((k) => k !== null).length;
 }
 
-export function handleShuffledButtonClick(state: GameState, key: Key): GameState {
+export function handleTrayButtonClick(state: GameState, key: Key): GameState {
 	if (key.disabled) return state;
 	return { ...state, selected: key };
 }
 
-export function handleMaskedButtonClick(state: GameState, clickedKey: Key): GameState {
+export function handleBoardButtonClick(state: GameState, position: number): GameState {
 	const selected = state.selected;
-	const isPlaced = !clickedKey.label.includes('*');
+	const current = state.board[position];
 
-	if (isPlaced) {
-		const original = originalKeys[clickedKey.id];
-		if (!original) return state;
-		const idToEnable = clickedKey.sourceId ?? clickedKey.id;
-
+	if (current !== null) {
+		if (selected && selected.type === current.type) {
+			const newTray = [...state.tray.filter((k) => k.id !== selected.id), current];
+			const newBoard = [...state.board];
+			newBoard[position] = selected;
+			return {
+				...state,
+				board: newBoard,
+				tray: newTray,
+				selected: null
+			};
+		}
+		const restoredTray = [...state.tray, current];
+		const newBoard = [...state.board];
+		newBoard[position] = null;
 		return {
 			...state,
-			maskedKeys: state.maskedKeys.map((k, i) => (i === clickedKey.id ? maskLabel(original) : k)),
-			shuffledKeys: state.shuffledKeys.map((k) =>
-				k.id === idToEnable ? { ...k, disabled: false } : k
-			)
+			board: newBoard,
+			tray: restoredTray,
+			selected: null
 		};
 	}
 
-	if (selected && selected.type === clickedKey.type) {
+	if (selected && selected.type === originalKeys[position].type) {
+		const newTray = state.tray.filter((k) => k.id !== selected.id);
+		const newBoard = [...state.board];
+		newBoard[position] = selected;
 		return {
 			...state,
-			maskedKeys: state.maskedKeys.map((k, i) =>
-				i === clickedKey.id ? { ...selected, id: clickedKey.id, sourceId: selected.id } : k
-			),
-			shuffledKeys: state.shuffledKeys.map((k) =>
-				k.id === selected.id ? { ...k, disabled: true } : k
-			),
+			board: newBoard,
+			tray: newTray,
 			selected: null
 		};
 	}
@@ -82,7 +78,7 @@ export function handleMaskedButtonClick(state: GameState, clickedKey: Key): Game
 
 export function endGame(state: GameState): GameResult {
 	return {
-		scores: countMatchingKeys(originalKeys, state.maskedKeys),
-		swappedKeys: state.maskedKeys
+		scores: countMatchingKeys(state.board, originalKeys),
+		board: state.board
 	};
 }

@@ -4,8 +4,8 @@
 	import {
 		createInitialState,
 		getPlacedCount,
-		handleShuffledButtonClick,
-		handleMaskedButtonClick,
+		handleTrayButtonClick,
+		handleBoardButtonClick,
 		endGame
 	} from '$lib/game';
 
@@ -16,20 +16,20 @@
 	type Props = {
 		timeInSeconds: number;
 		showHints: boolean;
-		end: (event: { scores: number; swappedKeys: Key[] }) => void;
+		end: (event: { scores: number; board: (Key | null)[] }) => void;
 	};
 	let { timeInSeconds, showHints, end }: Props = $props();
 
 	let gameState = $state(createInitialState());
 
-	let placedCount = $derived(getPlacedCount(gameState.maskedKeys));
+	let placedCount = $derived(getPlacedCount(gameState.board));
 
-	function onShuffledButtonClick(key: Key) {
-		gameState = handleShuffledButtonClick(gameState, key);
+	function onTrayButtonClick(key: Key) {
+		gameState = handleTrayButtonClick(gameState, key);
 	}
 
-	function onMaskedButtonClick(key: Key) {
-		gameState = handleMaskedButtonClick(gameState, key);
+	function onBoardButtonClick(index: number) {
+		gameState = handleBoardButtonClick(gameState, index);
 	}
 
 	function onCountdownEnd() {
@@ -37,7 +37,7 @@
 		gameState = { ...gameState, isGameOver: true, scores: result.scores };
 		end({
 			scores: result.scores,
-			swappedKeys: result.swappedKeys
+			board: result.board
 		});
 	}
 </script>
@@ -74,8 +74,8 @@
 				Keyboard Plate
 			</h2>
 			<Keyboard
-				keys={gameState.maskedKeys}
-				onClick={onMaskedButtonClick}
+				keys={gameState.board}
+				onClick={onBoardButtonClick}
 				selectedType={showHints ? gameState.selected?.type : null}
 			/>
 		</div>
@@ -95,8 +95,8 @@
 			</div>
 			<div class="max-h-64 overflow-y-auto">
 				<ShuffledButtons
-					keys={gameState.shuffledKeys}
-					onClick={onShuffledButtonClick}
+					keys={gameState.tray}
+					onClick={onTrayButtonClick}
 					selected={gameState.selected}
 				/>
 			</div>

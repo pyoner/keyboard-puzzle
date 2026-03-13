@@ -1,18 +1,22 @@
-<!-- KeyboardRow.svelte -->
 <script lang="ts">
 	import type { Key, KeyType } from '$lib/game';
 	import Button from './Button.svelte';
 
 	type Props = {
 		keys: Key[];
+		offset: number;
 		selectedType?: KeyType | null;
-		onClick: (key: Key) => void;
+		onClick: (index: number) => void;
 	};
-	let { keys, selectedType = null, onClick }: Props = $props();
+	let { keys, offset = 0, selectedType = null, onClick }: Props = $props();
+
+	function handleClick(index: number) {
+		onClick(offset + index);
+	}
 </script>
 
 <div class="flex justify-center gap-1">
-	{#each keys as key (key.id)}
-		<Button {key} {onClick} highlighted={selectedType === key.type} />
+	{#each keys as key, i (key.id)}
+		<Button {key} onClick={() => handleClick(i)} highlighted={selectedType === key.type} />
 	{/each}
 </div>

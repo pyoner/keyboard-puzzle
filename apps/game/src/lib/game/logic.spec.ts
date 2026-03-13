@@ -1,18 +1,15 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import {
 	shuffle,
-	maskLabel,
-	isMasked,
 	countMatchingKeys,
-	copyKeys,
 	createInitialState,
 	getPlacedCount,
-	handleShuffledButtonClick,
-	handleMaskedButtonClick,
+	handleTrayButtonClick,
+	handleBoardButtonClick,
 	endGame
 } from '$lib/game/logic';
 import { keys as originalKeys } from '$lib/keys';
-import type { GameState } from '$lib/game/types';
+import type { GameState, Key } from '$lib/game/types';
 
 describe('shuffle', () => {
 	it('returns array with same length', () => {
@@ -35,51 +32,17 @@ describe('shuffle', () => {
 	});
 });
 
-describe('maskLabel', () => {
-	it('replaces all characters with asterisk', () => {
-		const key = { id: 1, label: 'A', classNames: 'key', type: '1u' as const };
-		const result = maskLabel(key);
-		expect(result.label).toBe('*');
-	});
-
-	it('preserves multi-character labels', () => {
-		const key = { id: 1, label: 'ABC', classNames: 'key', type: '1u' as const };
-		const result = maskLabel(key);
-		expect(result.label).toBe('***');
-	});
-
-	it('preserves other properties', () => {
-		const key = { id: 1, label: 'A', classNames: 'key', type: '1u' as const };
-		const result = maskLabel(key);
-		expect(result.id).toBe(1);
-		expect(result.classNames).toBe('key');
-		expect(result.type).toBe('1u');
-	});
-});
-
-describe('isMasked', () => {
-	it('returns true for masked label', () => {
-		const key = { label: '***' };
-		expect(isMasked(key)).toBe(true);
-	});
-
-	it('returns false for normal label', () => {
-		const key = { label: 'A' };
-		expect(isMasked(key)).toBe(false);
-	});
-});
-
 describe('countMatchingKeys', () => {
 	it('counts matched keys by id', () => {
 		const original = [
-			{ id: 0, label: 'A', classNames: '', type: '1u' as const, sourceId: 0 },
+			{ id: 0, label: 'A', classNames: '', type: '1u' as const },
 			{ id: 1, label: 'B', classNames: '', type: '1u' as const }
 		];
-		const placed = [
-			{ id: 0, label: 'A', classNames: '', type: '1u' as const, sourceId: 0 },
-			{ id: 1, label: 'B', classNames: '', type: '1u' as const, sourceId: 99 }
+		const board: (Key | null)[] = [
+			{ id: 0, label: 'A', classNames: '', type: '1u' as const },
+			null
 		];
-		expect(countMatchingKeys(original, placed)).toBe(1);
+		expect(countMatchingKeys(board, original)).toBe(1);
 	});
 
 	it('counts matched keys by pairId', () => {
@@ -87,211 +50,178 @@ describe('countMatchingKeys', () => {
 			{ id: 0, label: 'Ctrl', classNames: '', type: '1.25u' as const, pairId: 5 },
 			{ id: 1, label: 'A', classNames: '', type: '1u' as const }
 		];
-		const placed = [
-			{ id: 0, label: 'Ctrl', classNames: '', type: '1.25u' as const, sourceId: 5 },
-			{ id: 1, label: 'A', classNames: '', type: '1u' as const, sourceId: 99 }
+		const board: (Key | null)[] = [
+			{ id: 5, label: 'Ctrl', classNames: '', type: '1.25u' as const },
+			null
 		];
-		expect(countMatchingKeys(original, placed)).toBe(1);
+		expect(countMatchingKeys(board, original)).toBe(1);
 	});
 
 	it('returns 0 when no matches', () => {
 		const original = [{ id: 0, label: 'A', classNames: '', type: '1u' as const }];
-		const placed = [{ id: 0, label: 'X', classNames: '', type: '1u' as const, sourceId: 99 }];
-		expect(countMatchingKeys(original, placed)).toBe(0);
-	});
-});
-
-describe('copyKeys', () => {
-	it('creates independent copy', () => {
-		const keys = [{ id: 1, label: 'A', classNames: 'key', type: '1u' as const }];
-		const copy = copyKeys(keys);
-		copy[0].label = 'X';
-		expect(keys[0].label).toBe('A');
-	});
-
-	it('preserves all properties', () => {
-		const keys = [{ id: 1, label: 'A', classNames: 'key', type: '1u' as const, disabled: true }];
-		const copy = copyKeys(keys);
-		expect(copy[0]).toEqual(keys[0]);
+		const board: (Key | null)[] = [{ id: 99, label: 'X', classNames: '', type: '1u' as const }];
+		expect(countMatchingKeys(board, original)).toBe(0);
 	});
 });
 
 describe('createInitialState', () => {
 	it('creates state with correct structure', () => {
 		const state = createInitialState();
-		expect(state).toHaveProperty('maskedKeys');
-		expect(state).toHaveProperty('shuffledKeys');
+		expect(state).toHaveProperty('board');
+		expect(state).toHaveProperty('tray');
 		expect(state).toHaveProperty('scores', 0);
 		expect(state).toHaveProperty('selected', null);
 		expect(state).toHaveProperty('isGameOver', false);
 	});
 
-	it('masks all key labels', () => {
+	it('board has nulls for all positions', () => {
 		const state = createInitialState();
-		state.maskedKeys.forEach((key) => {
-			expect(isMasked(key)).toBe(true);
-		});
+		expect(state.board.every((k) => k === null)).toBe(true);
 	});
 
-	it('has same number of shuffled keys as original', () => {
+	it('tray has same number of keys as original', () => {
 		const state = createInitialState();
-		expect(state.shuffledKeys).toHaveLength(originalKeys.length);
+		expect(state.tray).toHaveLength(originalKeys.length);
 	});
 });
 
 describe('getPlacedCount', () => {
-	it('returns 0 for all masked keys', () => {
-		const maskedKeys = originalKeys.map(maskLabel);
-		expect(getPlacedCount(maskedKeys)).toBe(0);
+	it('returns 0 for empty board', () => {
+		const board = originalKeys.map(() => null);
+		expect(getPlacedCount(board)).toBe(0);
 	});
 
 	it('counts placed keys correctly', () => {
-		const maskedKeys = originalKeys.map(maskLabel);
-		maskedKeys[0] = { ...originalKeys[0], sourceId: 0 };
-		maskedKeys[1] = { ...originalKeys[1], sourceId: 1 };
-		expect(getPlacedCount(maskedKeys)).toBe(2);
+		const board: (Key | null)[] = originalKeys.map(() => null);
+		board[0] = { id: 0, label: 'A', classNames: '', type: '1u' as const };
+		board[1] = { id: 1, label: 'B', classNames: '', type: '1u' as const };
+		expect(getPlacedCount(board)).toBe(2);
 	});
 });
 
-describe('handleShuffledButtonClick', () => {
+describe('handleTrayButtonClick', () => {
 	it('selects key when not disabled', () => {
 		const key = { id: 0, label: 'A', classNames: '', type: '1u' as const };
 		const state: GameState = {
-			maskedKeys: [],
-			shuffledKeys: [],
+			board: [],
+			tray: [],
 			scores: 0,
 			selected: null,
 			isGameOver: false
 		};
-		const result = handleShuffledButtonClick(state, key);
+		const result = handleTrayButtonClick(state, key);
 		expect(result.selected).toEqual(key);
 	});
 
 	it('returns same state when key is disabled', () => {
 		const key = { id: 0, label: 'A', classNames: '', type: '1u' as const, disabled: true };
 		const state: GameState = {
-			maskedKeys: [],
-			shuffledKeys: [],
+			board: [],
+			tray: [],
 			scores: 0,
 			selected: null,
 			isGameOver: false
 		};
-		const result = handleShuffledButtonClick(state, key);
+		const result = handleTrayButtonClick(state, key);
 		expect(result.selected).toBeNull();
 	});
 });
 
-describe('handleMaskedButtonClick', () => {
+describe('handleBoardButtonClick', () => {
 	let state: GameState;
 
 	beforeEach(() => {
 		state = createInitialState();
 	});
 
-	it('places key when type matches selected', () => {
-		const shuffledKey = state.shuffledKeys[0];
-		state = { ...state, selected: shuffledKey };
+	it('places key when type matches and position is empty', () => {
+		const key1u = state.tray.find((k) => k.type === '1u')!;
+		const pos1u = originalKeys.findIndex((k) => k.type === '1u');
+		state = { ...state, selected: key1u };
 
-		const clickedKey = state.maskedKeys[shuffledKey.id];
-		const result = handleMaskedButtonClick(state, clickedKey);
+		const result = handleBoardButtonClick(state, pos1u);
 
-		expect(result.maskedKeys[shuffledKey.id].sourceId).toBe(shuffledKey.id);
+		expect(result.board[pos1u]?.id).toBe(key1u.id);
+		expect(result.tray.find((k) => k.id === key1u.id)).toBeUndefined();
 		expect(result.selected).toBeNull();
-		expect(result.shuffledKeys.find((k) => k.id === shuffledKey.id)?.disabled).toBe(true);
 	});
 
 	it('correctly matches keys 9 and 0 in their positions', () => {
-		const key9 = state.shuffledKeys.find((k) => k.label === '9')!;
-		const key0 = state.shuffledKeys.find((k) => k.label === '0')!;
+		const key9 = state.tray.find((k) => k.label === '9')!;
+		const key0 = state.tray.find((k) => k.label === '0')!;
 
 		state = { ...state, selected: key9 };
-		let result = handleMaskedButtonClick(state, state.maskedKeys[9]);
-		expect(result.maskedKeys[9].sourceId).toBe(9);
-		expect(result.maskedKeys[9].label).toBe('9');
+		let result = handleBoardButtonClick(state, 9);
+		expect(result.board[9]?.id).toBe(9);
 
 		state = { ...result, selected: key0 };
-		result = handleMaskedButtonClick(state, state.maskedKeys[10]);
-		expect(result.maskedKeys[10].sourceId).toBe(10);
-		expect(result.maskedKeys[10].label).toBe('0');
+		result = handleBoardButtonClick(state, 10);
+		expect(result.board[10]?.id).toBe(10);
 
 		const gameResult = endGame(result);
 		expect(gameResult.scores).toBeGreaterThanOrEqual(2);
-
-		const finalKeys = originalKeys.map((key, index) => {
-			const swappedKey = result.maskedKeys[index];
-			if (isMasked(swappedKey)) {
-				return { ...key };
-			}
-			const isMatched =
-				swappedKey &&
-				(swappedKey.sourceId === key.id ||
-					(key.pairId !== undefined && swappedKey.sourceId === key.pairId));
-			return isMatched;
-		});
-
-		expect(finalKeys[9]).toBe(true);
-		expect(finalKeys[10]).toBe(true);
 	});
 
 	it('correctly highlights wrong placement (9 in slot 10)', () => {
-		const key9 = state.shuffledKeys.find((k) => k.label === '9')!;
+		const key9 = state.tray.find((k) => k.label === '9')!;
 
 		state = { ...state, selected: key9 };
-		const result = handleMaskedButtonClick(state, state.maskedKeys[10]);
+		const result = handleBoardButtonClick(state, 10);
 
-		expect(result.maskedKeys[10].sourceId).toBe(9);
-		expect(result.maskedKeys[10].label).toBe('9');
+		expect(result.board[10]?.id).toBe(9);
 
 		const gameResult = endGame(result);
 		expect(gameResult.scores).toBe(0);
-
-		const finalKeys = originalKeys.map((key, index) => {
-			const swappedKey = result.maskedKeys[index];
-			if (isMasked(swappedKey)) {
-				return { ...key };
-			}
-			const isMatched =
-				swappedKey &&
-				(swappedKey.sourceId === key.id ||
-					(key.pairId !== undefined && swappedKey.sourceId === key.pairId));
-			return isMatched;
-		});
-
-		expect(finalKeys[10]).toBe(false);
 	});
 
-	it('returns key to tray when clicking filled slot (undo)', () => {
-		const shuffledKey = state.shuffledKeys[0];
-		state = { ...state, selected: shuffledKey };
+	it('removes key from board when clicking filled slot (undo)', () => {
+		const trayKey = state.tray[0];
+		state = { ...state, selected: trayKey };
+		state = handleBoardButtonClick(state, 0);
 
-		const clickedKey = state.maskedKeys[shuffledKey.id];
-		state = handleMaskedButtonClick(state, clickedKey);
+		const result = handleBoardButtonClick(state, 0);
 
-		const result = handleMaskedButtonClick(state, state.maskedKeys[shuffledKey.id]);
+		expect(result.board[0]).toBeNull();
+		expect(result.tray.find((k) => k.id === trayKey.id)).toBeDefined();
+	});
 
-		expect(isMasked(result.maskedKeys[shuffledKey.id])).toBe(true);
-		expect(result.shuffledKeys.find((k) => k.id === shuffledKey.id)?.disabled).toBe(false);
+	it('swaps key when clicking filled slot with same type selected', () => {
+		const keyA = state.tray.find((k) => k.label === 'A')!;
+		const keyB = state.tray.find((k) => k.label === 'B')!;
+		const posA = originalKeys.findIndex((k) => k.label === 'A');
+
+		state = { ...state, selected: keyA };
+		state = handleBoardButtonClick(state, posA);
+		expect(state.board[posA]?.label).toBe('A');
+
+		state = { ...state, selected: keyB };
+		const result = handleBoardButtonClick(state, posA);
+
+		expect(result.board[posA]?.label).toBe('B');
+		expect(result.tray.find((k) => k.label === 'A')).toBeDefined();
+		expect(result.tray.find((k) => k.label === 'B')).toBeUndefined();
 	});
 
 	it('does nothing when type does not match', () => {
-		const shuffledKey = state.shuffledKeys.find((k) => k.type === '1u')!;
-		const wrongTypeKey = state.maskedKeys.find((k) => k.type !== '1u' && isMasked(k))!;
+		const key1u = state.tray.find((k) => k.type === '1u')!;
+		const wrongTypePosition = originalKeys.findIndex((k) => k.type !== '1u');
 
-		state = { ...state, selected: shuffledKey };
-		const result = handleMaskedButtonClick(state, wrongTypeKey);
+		state = { ...state, selected: key1u };
+		const result = handleBoardButtonClick(state, wrongTypePosition);
 
-		expect(result).toEqual(state);
+		expect(result.board[wrongTypePosition]).toBeNull();
+		expect(result.selected).toEqual(key1u);
 	});
 });
 
 describe('endGame', () => {
-	it('returns scores and swappedKeys', () => {
+	it('returns scores and board', () => {
 		const state = createInitialState();
-		state.maskedKeys[0] = { ...originalKeys[0], sourceId: 0 };
+		state.board[0] = { id: 0, label: 'A', classNames: '', type: '1u' as const };
 
 		const result = endGame(state);
 
 		expect(result.scores).toBe(1);
-		expect(result.swappedKeys).toBe(state.maskedKeys);
+		expect(result.board).toBe(state.board);
 	});
 });

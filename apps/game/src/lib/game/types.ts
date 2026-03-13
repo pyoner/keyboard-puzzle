@@ -6,19 +6,18 @@ export type Key = {
 	classNames: string;
 	type: KeyType;
 	disabled?: boolean;
-	sourceId?: number;
 	pairId?: number;
 };
 
 export type GameState = {
-	maskedKeys: Key[];
-	shuffledKeys: Key[];
-	scores: number;
+	board: (Key | null)[];
+	tray: Key[];
 	selected: Key | null;
+	scores: number;
 	isGameOver: boolean;
 };
 
 export type GameResult = {
 	scores: number;
-	swappedKeys: Key[];
+	board: (Key | null)[];
 };

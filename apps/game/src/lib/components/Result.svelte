@@ -1,31 +1,28 @@
 <script lang="ts">
 	import type { Key } from '$lib/game';
 	import { keys } from '$lib/keys';
-	import { isMasked } from '$lib/game';
 	import { shareOnTwitter } from '$lib/helpers';
 
 	import Keyboard from './keyboard/Keyboard.svelte';
 
 	interface Props {
-		swappedKeys?: Key[];
+		board?: (Key | null)[];
 		score?: number;
 		onReset: () => void;
 		onPlayAgain: () => void;
 	}
 
-	let { swappedKeys = [], score = 0, onReset, onPlayAgain }: Props = $props();
+	let { board = [], score = 0, onReset, onPlayAgain }: Props = $props();
 
 	const newKeys = $derived(
 		keys.map((key, index) => {
-			const swappedKey = swappedKeys[index];
-			if (isMasked(swappedKey)) {
+			const placed = board[index];
+			if (!placed) {
 				return { ...key };
 			}
 
 			const isMatched =
-				swappedKey &&
-				(swappedKey.sourceId === key.id ||
-					(key.pairId !== undefined && swappedKey.sourceId === key.pairId));
+				placed.id === key.id || (key.pairId !== undefined && placed.id === key.pairId);
 			return {
 				...key,
 				classNames: isMatched

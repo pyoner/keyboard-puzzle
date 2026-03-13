@@ -9,14 +9,10 @@
 		onClick: (key: Key) => void;
 	};
 	let { keys = [], selected = null, onClick: onButtonClick = () => {} }: Props = $props();
-
-	function handleButtonClick(key: Key) {
-		onButtonClick(key);
-	}
 </script>
 
 <div class="mx-auto flex flex-wrap justify-center gap-1 p-4">
 	{#each keys as key (key.id)}
-		<KeyboardButton {key} selected={selected?.id === key.id} onClick={handleButtonClick} />
+		<KeyboardButton {key} selected={selected?.id === key.id} onClick={() => onButtonClick(key)} />
 	{/each}
 </div>

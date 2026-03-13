@@ -45,16 +45,16 @@
 		gameState = 'game';
 	}
 
-	function handleEnd(event: { scores: number; swappedKeys: Key[] }) {
+	function handleEnd(event: { scores: number; board: (Key | null)[] }) {
 		gameState = 'result';
 		scores = event.scores;
-		swappedKeys = event.swappedKeys;
+		board = event.board;
 	}
 
 	function handleReset() {
 		gameState = 'start';
 		scores = 0;
-		swappedKeys = [];
+		board = [];
 	}
 
 	function handlePlayAgain() {
@@ -63,7 +63,7 @@
 	}
 
 	let scores = $state(0);
-	let swappedKeys = $state<Key[]>([]);
+	let board = $state<(Key | null)[]>([]);
 	let timeInSeconds = $state(3 * 60);
 </script>
 
@@ -141,7 +141,7 @@
 		{:else if gameState === 'game'}
 			<Game {timeInSeconds} {showHints} end={handleEnd} />
 		{:else if gameState === 'result'}
-			<Result score={scores} {swappedKeys} onReset={handleReset} onPlayAgain={handlePlayAgain} />
+			<Result score={scores} {board} onReset={handleReset} onPlayAgain={handlePlayAgain} />
 		{/if}
 	</div>
 
