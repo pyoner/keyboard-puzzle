@@ -86,14 +86,12 @@
 		<div class="card-body p-4">
 			<div class="mb-2 flex items-center justify-between">
 				<h2 class="card-title text-sm tracking-widest uppercase opacity-50">Your Key Tray</h2>
-				{#if gameState.selected}
-					<button
-						class="btn text-error btn-ghost btn-xs"
-						onclick={() => (gameState = { ...gameState, selected: null })}
-					>
-						Deselect
-					</button>
-				{/if}
+				<button
+					class="btn text-error btn-ghost btn-xs {gameState.selected ? '' : 'invisible'}"
+					onclick={() => (gameState = { ...gameState, selected: null })}
+				>
+					Deselect
+				</button>
 			</div>
 			<div class="max-h-64 overflow-y-auto">
 				<ShuffledButtons
