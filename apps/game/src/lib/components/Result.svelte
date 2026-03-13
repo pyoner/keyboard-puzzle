@@ -15,23 +15,25 @@
 
 	let { swappedKeys = [], score = 0, onReset, onPlayAgain }: Props = $props();
 
-	const newKeys = keys.map((key, index) => {
-		const swappedKey = swappedKeys[index];
-		if (isMasked(swappedKey)) {
-			return { ...key };
-		}
+	const newKeys = $derived(
+		keys.map((key, index) => {
+			const swappedKey = swappedKeys[index];
+			if (isMasked(swappedKey)) {
+				return { ...key };
+			}
 
-		const isMatched =
-			swappedKey &&
-			(swappedKey.sourceId === key.id ||
-				(key.pairId !== undefined && swappedKey.sourceId === key.pairId));
-		return {
-			...key,
-			classNames: isMatched
-				? `${key.classNames} bg-success text-success-content`
-				: `${key.classNames} bg-error text-error-content`
-		};
-	});
+			const isMatched =
+				swappedKey &&
+				(swappedKey.sourceId === key.id ||
+					(key.pairId !== undefined && swappedKey.sourceId === key.pairId));
+			return {
+				...key,
+				classNames: isMatched
+					? `${key.classNames} bg-success text-success-content`
+					: `${key.classNames} bg-error text-error-content`
+			};
+		})
+	);
 </script>
 
 <div class="flex flex-col gap-6 pt-4">
