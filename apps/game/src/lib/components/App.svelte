@@ -48,7 +48,5 @@
 		{:else if gameState === 'result'}
 			<Result score={scores} {swappedKeys} onReset={handleReset} onPlayAgain={handlePlayAgain} />
 		{/if}
-
-		<About />
 	</div>
 </div>

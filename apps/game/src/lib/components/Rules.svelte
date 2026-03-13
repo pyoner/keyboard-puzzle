@@ -3,7 +3,7 @@
 	let { timeInSeconds } = $props();
 </script>
 
-<div class="card mt-8 bg-base-200 shadow-xl">
+<div class="card bg-base-200 shadow-xl">
 	<div class="prose prose-sm card-body max-w-none md:prose-base">
 		<h2 class="card-title">Welcome to the Keyboard Puzzle game!</h2>
 		<p>
