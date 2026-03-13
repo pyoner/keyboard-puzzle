@@ -8,13 +8,34 @@
 @plugin '@tailwindcss/typography';
 
 @layer components {
-	.key {
-		@apply h-10 w-10 p-0 sm:h-12 sm:w-12 md:h-14 md:w-14;
+	.key-base {
+		@apply flex h-10 items-center justify-center p-0 sm:h-12 md:h-14;
 	}
-	.key-wide {
-		@apply h-10 w-16 px-1 sm:h-12 sm:w-20 sm:px-2 md:h-14 md:w-24;
+	.key-pad {
+		@apply px-1 sm:px-2;
 	}
-	.key-extra-wide {
-		@apply h-10 w-48 px-1 sm:h-12 sm:w-64 sm:px-2 md:h-14 md:w-80;
+	.key-1u {
+		@apply w-10 sm:w-12 md:w-14;
+	}
+	.key-1-25u {
+		@apply w-[3.125rem] sm:w-[3.75rem] md:w-[4.375rem];
+	}
+	.key-1-5u {
+		@apply w-[3.75rem] sm:w-[4.5rem] md:w-[5.25rem];
+	}
+	.key-1-75u {
+		@apply w-[4.375rem] sm:w-[5.25rem] md:w-[6.125rem];
+	}
+	.key-2u {
+		@apply w-[5rem] sm:w-[6rem] md:w-[7rem];
+	}
+	.key-2-25u {
+		@apply w-[5.625rem] sm:w-[6.75rem] md:w-[7.875rem];
+	}
+	.key-2-75u {
+		@apply w-[6.875rem] sm:w-[8.25rem] md:w-[9.625rem];
+	}
+	.key-6-25u {
+		@apply w-[15.625rem] sm:w-[18.75rem] md:w-[21.875rem];
 	}
 }
