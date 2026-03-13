@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import {
 	shuffle,
 	maskLabel,
@@ -12,7 +12,7 @@ import {
 	endGame
 } from '$lib/game/logic';
 import { keys as originalKeys } from '$lib/keys';
-import type { Key, GameState } from '$lib/game/types';
+import type { GameState } from '$lib/game/types';
 
 describe('shuffle', () => {
 	it('returns array with same length', () => {
@@ -215,7 +215,7 @@ describe('handleMaskedButtonClick', () => {
 
 	it('does nothing when type does not match', () => {
 		const shuffledKey = state.shuffledKeys.find((k) => k.type === '1u')!;
-		const wrongTypeKey = state.maskedKeys.find((k, idx) => k.type !== '1u' && isMasked(k))!;
+		const wrongTypeKey = state.maskedKeys.find((k) => k.type !== '1u' && isMasked(k))!;
 
 		state = { ...state, selected: shuffledKey };
 		const result = handleMaskedButtonClick(state, wrongTypeKey);
