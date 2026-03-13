@@ -200,6 +200,66 @@ describe('handleMaskedButtonClick', () => {
 		expect(result.shuffledKeys.find((k) => k.id === shuffledKey.id)?.disabled).toBe(true);
 	});
 
+	it('correctly matches keys 9 and 0 in their positions', () => {
+		const key9 = state.shuffledKeys.find((k) => k.label === '9')!;
+		const key0 = state.shuffledKeys.find((k) => k.label === '0')!;
+
+		state = { ...state, selected: key9 };
+		let result = handleMaskedButtonClick(state, state.maskedKeys[9]);
+		expect(result.maskedKeys[9].sourceId).toBe(9);
+		expect(result.maskedKeys[9].label).toBe('9');
+
+		state = { ...result, selected: key0 };
+		result = handleMaskedButtonClick(state, state.maskedKeys[10]);
+		expect(result.maskedKeys[10].sourceId).toBe(10);
+		expect(result.maskedKeys[10].label).toBe('0');
+
+		const gameResult = endGame(result);
+		expect(gameResult.scores).toBeGreaterThanOrEqual(2);
+
+		const finalKeys = originalKeys.map((key, index) => {
+			const swappedKey = result.maskedKeys[index];
+			if (isMasked(swappedKey)) {
+				return { ...key };
+			}
+			const isMatched =
+				swappedKey &&
+				(swappedKey.sourceId === key.id ||
+					(key.pairId !== undefined && swappedKey.sourceId === key.pairId));
+			return isMatched;
+		});
+
+		expect(finalKeys[9]).toBe(true);
+		expect(finalKeys[10]).toBe(true);
+	});
+
+	it('correctly highlights wrong placement (9 in slot 10)', () => {
+		const key9 = state.shuffledKeys.find((k) => k.label === '9')!;
+
+		state = { ...state, selected: key9 };
+		const result = handleMaskedButtonClick(state, state.maskedKeys[10]);
+
+		expect(result.maskedKeys[10].sourceId).toBe(9);
+		expect(result.maskedKeys[10].label).toBe('9');
+
+		const gameResult = endGame(result);
+		expect(gameResult.scores).toBe(0);
+
+		const finalKeys = originalKeys.map((key, index) => {
+			const swappedKey = result.maskedKeys[index];
+			if (isMasked(swappedKey)) {
+				return { ...key };
+			}
+			const isMatched =
+				swappedKey &&
+				(swappedKey.sourceId === key.id ||
+					(key.pairId !== undefined && swappedKey.sourceId === key.pairId));
+			return isMatched;
+		});
+
+		expect(finalKeys[10]).toBe(false);
+	});
+
 	it('returns key to tray when clicking filled slot (undo)', () => {
 		const shuffledKey = state.shuffledKeys[0];
 		state = { ...state, selected: shuffledKey };
