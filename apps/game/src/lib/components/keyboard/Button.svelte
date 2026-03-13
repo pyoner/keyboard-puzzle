@@ -17,7 +17,7 @@
 </script>
 
 <button
-	class={`btn ${key.classNames} ${selected ? 'btn-primary' : ''}`}
+	class={`btn whitespace-nowrap ${key.classNames} ${selected ? 'btn-primary' : ''} ${key.label.length > 5 ? 'text-[10px] sm:text-xs' : ''}`}
 	disabled={key.disabled}
 	onclick={handleClick}
 >
