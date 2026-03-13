@@ -22,8 +22,10 @@ export function countMatchingKeys(a: Key[], b: Key[]) {
 	let count = 0;
 
 	for (let i = 0; i < a.length; i++) {
-		// Compare the sourceId of the placed key with the original slot id
-		if (b[i]?.sourceId === a[i].id) {
+		// Compare the sourceId of the placed key with the original slot id or its pairId
+		const isMatched =
+			b[i]?.sourceId === a[i].id || (a[i].pairId !== undefined && b[i]?.sourceId === a[i].pairId);
+		if (isMatched) {
 			count++;
 		}
 	}

@@ -7,4 +7,5 @@ export type Key = {
 	type: KeyType;
 	disabled?: boolean;
 	sourceId?: number;
+	pairId?: number;
 };

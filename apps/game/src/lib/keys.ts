@@ -63,12 +63,12 @@ export const keys: Key[] = [
 	{ id: 52, label: 'Shift', classNames: 'key-base key-pad key-2-75u', type: '2.75u' },
 
 	// Row 5
-	{ id: 53, label: 'Ctrl', classNames: 'key-base key-pad key-1-25u', type: '1.25u' },
-	{ id: 54, label: 'Win', classNames: 'key-base key-pad key-1-25u', type: '1.25u' },
-	{ id: 55, label: 'Alt', classNames: 'key-base key-pad key-1-25u', type: '1.25u' },
+	{ id: 53, label: 'Ctrl', classNames: 'key-base key-pad key-1-25u', type: '1.25u', pairId: 60 },
+	{ id: 54, label: 'Win', classNames: 'key-base key-pad key-1-25u', type: '1.25u', pairId: 58 },
+	{ id: 55, label: 'Alt', classNames: 'key-base key-pad key-1-25u', type: '1.25u', pairId: 57 },
 	{ id: 56, label: 'Space', classNames: 'key-base key-pad key-6-25u', type: '6.25u' },
-	{ id: 57, label: 'Alt', classNames: 'key-base key-pad key-1-25u', type: '1.25u' },
-	{ id: 58, label: 'Win', classNames: 'key-base key-pad key-1-25u', type: '1.25u' },
+	{ id: 57, label: 'Alt', classNames: 'key-base key-pad key-1-25u', type: '1.25u', pairId: 55 },
+	{ id: 58, label: 'Win', classNames: 'key-base key-pad key-1-25u', type: '1.25u', pairId: 54 },
 	{ id: 59, label: 'Menu', classNames: 'key-base key-pad key-1-25u', type: '1.25u' },
-	{ id: 60, label: 'Ctrl', classNames: 'key-base key-pad key-1-25u', type: '1.25u' }
+	{ id: 60, label: 'Ctrl', classNames: 'key-base key-pad key-1-25u', type: '1.25u', pairId: 53 }
 ];

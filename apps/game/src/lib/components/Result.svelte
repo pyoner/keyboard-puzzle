@@ -20,7 +20,10 @@
 			return { ...key };
 		}
 
-		const isMatched = swappedKey && swappedKey.sourceId === key.id;
+		const isMatched =
+			swappedKey &&
+			(swappedKey.sourceId === key.id ||
+				(key.pairId !== undefined && swappedKey.sourceId === key.pairId));
 		return {
 			...key,
 			classNames: isMatched
