@@ -3,7 +3,6 @@
 	import Start from './Start.svelte';
 	import Game from './Game.svelte';
 	import Result from './Result.svelte';
-	import About from './About.svelte';
 	import { getTimeFromQuery } from '../helpers';
 	import { onMount } from 'svelte';
 

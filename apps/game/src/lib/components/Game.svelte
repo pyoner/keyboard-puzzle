@@ -31,8 +31,9 @@
 			const originalKey = keys[key.id];
 			if (!originalKey) return;
 
-			// Mark the key as enabled in the tray
-			shuffledKeys = shuffledKeys.map((k) => (k.id === key.id ? { ...k, disabled: false } : k));
+			// Mark the key as enabled in the tray using the sourceId (if available)
+			const idToEnable = key.sourceId ?? key.id;
+			shuffledKeys = shuffledKeys.map((k) => (k.id === idToEnable ? { ...k, disabled: false } : k));
 
 			// Re-mask the slot
 			maskedKeys[key.id] = maskLabel(originalKey);
@@ -41,7 +42,9 @@
 
 		// If a key is selected and matches the slot type, place it
 		if (selected && selected.type === key.type) {
-			maskedKeys[key.id] = { ...selected, id: key.id };
+			// Preserve the original key.id to prevent Svelte from breaking keyed each loops
+			// but store the selected key's original ID as sourceId for undo functionality
+			maskedKeys[key.id] = { ...selected, id: key.id, sourceId: selected.id };
 			shuffledKeys = shuffledKeys.map((k) =>
 				k.id === selected!.id ? { ...k, disabled: true } : k
 			);
