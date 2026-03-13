@@ -17,8 +17,7 @@
 				id: index,
 				label: '*',
 				classNames: original ? `${original.classNames} btn-outline` : '',
-				type: original?.type || '1u',
-				disabled: true
+				type: original?.type || '1u'
 			};
 		}
 		return key;

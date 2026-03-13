@@ -16,7 +16,7 @@
 </script>
 
 <div class="flex justify-center gap-1">
-	{#each keys as key, i (key.id)}
+	{#each keys as key, i (i)}
 		<Button {key} onClick={() => handleClick(i)} highlighted={selectedType === key.type} />
 	{/each}
 </div>
