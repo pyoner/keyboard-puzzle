@@ -1,101 +1,78 @@
 import { keys as originalKeys } from '$lib/keys';
 import type { Key, GameState, GameResult } from './types';
 
-export function shuffle<T>(array: T[]) {
-	const shuffledArray = [...array];
-	for (let i = shuffledArray.length - 1; i > 0; i--) {
-		const j = Math.floor(Math.random() * (i + 1));
-		[shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
-	}
-	return shuffledArray;
+export function shuffle<T>(array: T[]): T[] {
+	return array.toSorted(() => Math.random() - 0.5);
 }
 
-export function maskLabel(obj: Key) {
-	return { ...obj, label: obj.label.replace(/./g, '*') };
+export function maskLabel(key: Key): Key {
+	return { ...key, label: '*'.repeat(key.label.length) };
 }
 
-export function isMasked(key: { label: string | string[] }) {
-	return key.label.includes('*');
-}
-
-export function countMatchingKeys(a: Key[], b: Key[]) {
-	let count = 0;
-
-	for (let i = 0; i < a.length; i++) {
-		const isMatched =
-			b[i]?.sourceId === a[i].id || (a[i].pairId !== undefined && b[i]?.sourceId === a[i].pairId);
-		if (isMatched) {
-			count++;
-		}
-	}
-
-	return count;
-}
-
-export function copyKeys(keys: Key[]) {
+export function copyKeys(keys: Key[]): Key[] {
 	return keys.map((key) => ({ ...key }));
 }
 
+export function isMasked(key: { label: string | string[] }): boolean {
+	return key.label.includes('*');
+}
+
+export function countMatchingKeys(original: Key[], placed: Key[]): number {
+	return original.reduce((count, orig, i) => {
+		const key = placed[i];
+		const matched =
+			key?.sourceId === orig.id || (orig.pairId !== undefined && key?.sourceId === orig.pairId);
+		return count + (matched ? 1 : 0);
+	}, 0);
+}
+
 export function createInitialState(): GameState {
+	const shuffled = shuffle(originalKeys);
 	return {
 		maskedKeys: originalKeys.map(maskLabel),
-		shuffledKeys: copyKeys(shuffle(originalKeys)),
+		shuffledKeys: shuffled.map((k) => ({ ...k })),
 		scores: 0,
 		selected: null,
 		isGameOver: false
 	};
 }
 
-export function getPlacedCount(maskedKeys: Key[]): number {
-	return maskedKeys.filter((k) => !isMasked(k)).length;
+export function getPlacedCount(keys: Key[]): number {
+	return keys.filter((k) => !k.label.includes('*')).length;
 }
 
 export function handleShuffledButtonClick(state: GameState, key: Key): GameState {
 	if (key.disabled) return state;
-
-	return {
-		...state,
-		selected: key
-	};
+	return { ...state, selected: key };
 }
 
 export function handleMaskedButtonClick(state: GameState, clickedKey: Key): GameState {
 	const selected = state.selected;
+	const isPlaced = !clickedKey.label.includes('*');
 
-	if (!isMasked(clickedKey)) {
-		const originalKey = originalKeys[clickedKey.id];
-		if (!originalKey) return state;
-
+	if (isPlaced) {
+		const original = originalKeys[clickedKey.id];
+		if (!original) return state;
 		const idToEnable = clickedKey.sourceId ?? clickedKey.id;
-
-		const newMaskedKeys = state.maskedKeys.map((k, idx) =>
-			idx === clickedKey.id ? maskLabel(originalKey) : k
-		);
-
-		const newShuffledKeys = state.shuffledKeys.map((k) =>
-			k.id === idToEnable ? { ...k, disabled: false } : k
-		);
 
 		return {
 			...state,
-			maskedKeys: newMaskedKeys,
-			shuffledKeys: newShuffledKeys
+			maskedKeys: state.maskedKeys.map((k, i) => (i === clickedKey.id ? maskLabel(original) : k)),
+			shuffledKeys: state.shuffledKeys.map((k) =>
+				k.id === idToEnable ? { ...k, disabled: false } : k
+			)
 		};
 	}
 
 	if (selected && selected.type === clickedKey.type) {
-		const newMaskedKeys = state.maskedKeys.map((k, idx) =>
-			idx === clickedKey.id ? { ...selected, id: clickedKey.id, sourceId: selected.id } : k
-		);
-
-		const newShuffledKeys = state.shuffledKeys.map((k) =>
-			k.id === selected.id ? { ...k, disabled: true } : k
-		);
-
 		return {
 			...state,
-			maskedKeys: newMaskedKeys,
-			shuffledKeys: newShuffledKeys,
+			maskedKeys: state.maskedKeys.map((k, i) =>
+				i === clickedKey.id ? { ...selected, id: clickedKey.id, sourceId: selected.id } : k
+			),
+			shuffledKeys: state.shuffledKeys.map((k) =>
+				k.id === selected.id ? { ...k, disabled: true } : k
+			),
 			selected: null
 		};
 	}
@@ -104,10 +81,8 @@ export function handleMaskedButtonClick(state: GameState, clickedKey: Key): Game
 }
 
 export function endGame(state: GameState): GameResult {
-	const scores = countMatchingKeys(originalKeys, state.maskedKeys);
-
 	return {
-		scores,
+		scores: countMatchingKeys(originalKeys, state.maskedKeys),
 		swappedKeys: state.maskedKeys
 	};
 }
