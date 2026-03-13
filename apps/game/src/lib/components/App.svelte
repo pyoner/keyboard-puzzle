@@ -8,6 +8,11 @@
 
 	let gameState = $state('start');
 	let showHints = $state(true);
+	let isDarkTheme = $state(false);
+
+	function applyTheme(dark: boolean) {
+		document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+	}
 
 	onMount(() => {
 		timeInSeconds = getTimeFromQuery(window.location) || timeInSeconds;
@@ -16,10 +21,23 @@
 		if (storedHints !== null) {
 			showHints = storedHints === 'true';
 		}
+
+		const storedTheme = localStorage.getItem('keyboard-puzzle-theme');
+		if (storedTheme !== null) {
+			isDarkTheme = storedTheme === 'dark';
+		} else {
+			isDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+		}
+		applyTheme(isDarkTheme);
 	});
 
 	$effect(() => {
 		localStorage.setItem('keyboard-puzzle-hints', showHints.toString());
+	});
+
+	$effect(() => {
+		localStorage.setItem('keyboard-puzzle-theme', isDarkTheme ? 'dark' : 'light');
+		applyTheme(isDarkTheme);
 	});
 
 	function handleStart() {
@@ -97,6 +115,13 @@
 				<p class="mt-1 px-1 text-xs opacity-50">
 					Highlights valid slots when a key is selected from the tray.
 				</p>
+			</div>
+			<div class="form-control mt-4">
+				<label class="label cursor-pointer justify-between">
+					<span class="label-text font-medium">Dark Theme</span>
+					<input type="checkbox" class="toggle toggle-primary" bind:checked={isDarkTheme} />
+				</label>
+				<p class="mt-1 px-1 text-xs opacity-50">Toggle between light and dark color schemes.</p>
 			</div>
 			<div class="modal-action">
 				<form method="dialog">
