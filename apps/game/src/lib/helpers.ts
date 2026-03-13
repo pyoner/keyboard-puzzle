@@ -1,4 +1,4 @@
-import type { Key } from './types';
+import type { Key } from './game/types';
 
 // helpers.js
 export function shuffle<T>(array: T[]) {

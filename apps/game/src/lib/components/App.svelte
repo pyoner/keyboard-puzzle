@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Key } from '$lib/types';
+	import type { Key } from '$lib/game';
 	import Start from './Start.svelte';
 	import Game from './Game.svelte';
 	import Result from './Result.svelte';

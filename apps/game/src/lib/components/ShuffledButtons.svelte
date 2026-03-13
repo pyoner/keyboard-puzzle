@@ -1,6 +1,6 @@
 <!-- ShuffledButtons.svelte -->
 <script lang="ts">
-	import type { Key } from '$lib/types';
+	import type { Key } from '$lib/game';
 	import KeyboardButton from './keyboard/Button.svelte';
 
 	type Props = {

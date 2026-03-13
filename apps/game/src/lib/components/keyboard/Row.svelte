@@ -1,6 +1,6 @@
 <!-- KeyboardRow.svelte -->
 <script lang="ts">
-	import type { Key, KeyType } from '$lib/types';
+	import type { Key, KeyType } from '$lib/game';
 	import Button from './Button.svelte';
 
 	type Props = {

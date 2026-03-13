@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Key } from '$lib/types';
+	import type { Key } from '$lib/game';
 	import { keys } from '$lib/keys';
 	import { isMasked, shareOnTwitter } from '$lib/helpers';
 

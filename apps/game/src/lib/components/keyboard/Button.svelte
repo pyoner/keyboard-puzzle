@@ -1,6 +1,6 @@
 <!-- KeyboardButton.svlete -->
 <script lang="ts">
-	import type { Key } from '$lib/types';
+	import type { Key } from '$lib/game';
 
 	type Props = {
 		key: Key;
