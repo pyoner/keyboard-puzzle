@@ -1,6 +1,40 @@
 import { keys as originalKeys } from '$lib/keys';
-import { maskLabel, isMasked, countMatchingKeys, copyKeys, shuffle } from '$lib/helpers';
 import type { Key, GameState, GameResult } from './types';
+
+export function shuffle<T>(array: T[]) {
+	const shuffledArray = [...array];
+	for (let i = shuffledArray.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+	}
+	return shuffledArray;
+}
+
+export function maskLabel(obj: Key) {
+	return { ...obj, label: obj.label.replace(/./g, '*') };
+}
+
+export function isMasked(key: { label: string | string[] }) {
+	return key.label.includes('*');
+}
+
+export function countMatchingKeys(a: Key[], b: Key[]) {
+	let count = 0;
+
+	for (let i = 0; i < a.length; i++) {
+		const isMatched =
+			b[i]?.sourceId === a[i].id || (a[i].pairId !== undefined && b[i]?.sourceId === a[i].pairId);
+		if (isMatched) {
+			count++;
+		}
+	}
+
+	return count;
+}
+
+export function copyKeys(keys: Key[]) {
+	return keys.map((key) => ({ ...key }));
+}
 
 export function createInitialState(): GameState {
 	return {

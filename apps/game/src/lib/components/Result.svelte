@@ -1,7 +1,8 @@
 <script lang="ts">
 	import type { Key } from '$lib/game';
 	import { keys } from '$lib/keys';
-	import { isMasked, shareOnTwitter } from '$lib/helpers';
+	import { isMasked } from '$lib/game';
+	import { shareOnTwitter } from '$lib/helpers';
 
 	import Keyboard from './keyboard/Keyboard.svelte';
 
