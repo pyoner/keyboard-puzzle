@@ -3,13 +3,11 @@
 
 	type Props = {
 		timeInSeconds?: number;
-		children?: import('svelte').Snippet;
 		end: () => void;
 	};
 
-	let { timeInSeconds = 0, children, end }: Props = $props();
+	let { timeInSeconds = 0, end }: Props = $props();
 	let remainingTime = $state(timeInSeconds);
-	let showChildren = $state(false);
 
 	onMount(() => {
 		const countdownInterval = setInterval(() => {
@@ -17,7 +15,6 @@
 				remainingTime--;
 			} else {
 				clearInterval(countdownInterval);
-				showChildren = true;
 				end();
 			}
 		}, 1000);
@@ -28,13 +25,9 @@
 	});
 </script>
 
-{#if !showChildren}
-	<div class="mb-4 flex flex-col items-center">
-		<span class="countdown font-mono text-5xl">
-			<span style="--value:{remainingTime};"></span>
-		</span>
-		<span class="text-sm font-semibold opacity-70">seconds remaining</span>
-	</div>
-{:else}
-	{@render children?.()}
-{/if}
+<div class="flex flex-col items-center">
+	<span class="countdown font-mono text-4xl">
+		<span style="--value:{Math.floor(remainingTime / 60)};"></span>:
+		<span style="--value:{remainingTime % 60};"></span>
+	</span>
+</div>

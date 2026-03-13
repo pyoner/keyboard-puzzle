@@ -19,6 +19,17 @@
 		swappedKeys = event.swappedKeys;
 	}
 
+	function handleReset() {
+		gameState = 'start';
+		scores = 0;
+		swappedKeys = [];
+	}
+
+	function handlePlayAgain() {
+		handleReset();
+		handleStart();
+	}
+
 	let scores = $state(0);
 	let swappedKeys = $state<Key[]>([]);
 	let timeInSeconds = $state(3 * 60);
@@ -35,7 +46,7 @@
 		{:else if gameState === 'game'}
 			<Game {timeInSeconds} end={handleEnd} />
 		{:else if gameState === 'result'}
-			<Result score={scores} {swappedKeys} />
+			<Result score={scores} {swappedKeys} onReset={handleReset} onPlayAgain={handlePlayAgain} />
 		{/if}
 
 		<About />

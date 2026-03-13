@@ -8,9 +8,11 @@
 	interface Props {
 		swappedKeys?: Key[];
 		score?: number;
+		onReset: () => void;
+		onPlayAgain: () => void;
 	}
 
-	let { swappedKeys = [], score = 0 }: Props = $props();
+	let { swappedKeys = [], score = 0, onReset, onPlayAgain }: Props = $props();
 
 	const newKeys = keys.map((key, index) => {
 		const swappedKey = swappedKeys[index];
@@ -34,7 +36,9 @@
 		<p class="text-2xl font-semibold">Total Score: {score}</p>
 	</div>
 	<Keyboard keys={newKeys} />
-	<div class="mt-4 flex justify-center">
+	<div class="mt-4 flex justify-center gap-4">
+		<button class="btn btn-lg btn-primary" onclick={onPlayAgain}>Play Again</button>
+		<button class="btn btn-outline btn-lg" onclick={onReset}>Main Menu</button>
 		<!-- eslint-disable svelte/no-navigation-without-resolve -->
 		<a
 			href={shareOnTwitter(score)}
