@@ -4,7 +4,6 @@
 
 	import Keyboard from './keyboard/Keyboard.svelte';
 	import Rules from './Rules.svelte';
-	import About from './About.svelte';
 
 	type Props = {
 		timeInSeconds: number;
@@ -46,6 +45,5 @@
 	<!-- Bottom: Supporting Info -->
 	<div class="flex w-full max-w-2xl flex-col gap-8">
 		<Rules {timeInSeconds} />
-		<About />
 	</div>
 </div>
