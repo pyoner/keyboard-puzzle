@@ -3,6 +3,7 @@
 	import Start from './Start.svelte';
 	import Game from './Game.svelte';
 	import Result from './Result.svelte';
+	import Footer from './Footer.svelte';
 	import { getTimeFromQuery } from '../helpers';
 	import { onMount } from 'svelte';
 
@@ -143,4 +144,6 @@
 			<Result score={scores} {swappedKeys} onReset={handleReset} onPlayAgain={handlePlayAgain} />
 		{/if}
 	</div>
+
+	<Footer />
 </div>
