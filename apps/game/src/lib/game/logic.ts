@@ -6,12 +6,14 @@ export function shuffle<T>(array: T[]): T[] {
 }
 
 export function countMatchingKeys(board: (Key | null)[], original: Key[]): number {
-	return original.reduce((count, orig, i) => {
+	let count = 0;
+	original.forEach((orig, i) => {
 		const placed = board[i];
-		const matched =
-			placed?.id === orig.id || (orig.pairId !== undefined && placed?.id === orig.pairId);
-		return count + (matched ? 1 : 0);
-	}, 0);
+		if (placed && (placed.id === orig.id || orig.pairId === placed.id)) {
+			count++;
+		}
+	});
+	return count;
 }
 
 export function createInitialState(): GameState {
