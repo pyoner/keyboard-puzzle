@@ -2,7 +2,6 @@
 	import type { Key } from '$lib/types';
 	import { maskLabel, isMasked, shuffle, countMatchingKeys, copyKeys } from '$lib/helpers';
 	import { keys } from '$lib/keys';
-	import { onMount } from 'svelte';
 
 	import Keyboard from './keyboard/Keyboard.svelte';
 	import ShuffledButtons from './ShuffledButtons.svelte';
@@ -10,28 +9,16 @@
 
 	type Props = {
 		timeInSeconds: number;
+		showHints: boolean;
 		end: (event: { scores: number; swappedKeys: Key[] }) => void;
 	};
-	let { timeInSeconds, end }: Props = $props();
+	let { timeInSeconds, showHints, end }: Props = $props();
 
 	let maskedKeys = $state(keys.map(maskLabel));
 	let shuffledKeys = $state(copyKeys(shuffle(keys)));
 
 	let scores = $state(0);
 	let placedCount = $derived(maskedKeys.filter((k) => !isMasked(k)).length);
-
-	let showHints = $state(true);
-
-	onMount(() => {
-		const storedHints = localStorage.getItem('keyboard-puzzle-hints');
-		if (storedHints !== null) {
-			showHints = storedHints === 'true';
-		}
-	});
-
-	$effect(() => {
-		localStorage.setItem('keyboard-puzzle-hints', showHints.toString());
-	});
 
 	let selected = $state<Key | null>(null);
 	function handleShuffledButtonClick(key: Key) {
@@ -103,15 +90,9 @@
 	<!-- Main Keyboard Workmat -->
 	<div class="card overflow-hidden border-2 border-base-content/10 bg-base-300 shadow-xl">
 		<div class="card-body p-2 sm:p-4">
-			<div class="mb-2 flex items-center justify-between px-4">
-				<div class="w-24"></div>
-				<!-- Spacer for centering -->
-				<h2 class="card-title text-sm tracking-widest uppercase opacity-50">Keyboard Plate</h2>
-				<div class="flex items-center gap-2">
-					<span class="text-xs tracking-tighter uppercase opacity-50">Hints</span>
-					<input type="checkbox" class="toggle toggle-primary toggle-xs" bind:checked={showHints} />
-				</div>
-			</div>
+			<h2 class="mb-2 card-title justify-center text-sm tracking-widest uppercase opacity-50">
+				Keyboard Plate
+			</h2>
 			<Keyboard
 				keys={maskedKeys}
 				onClick={handleMaskedButtonClick}
