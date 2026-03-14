@@ -93,7 +93,7 @@
 					Deselect
 				</button>
 			</div>
-			<div class="max-h-64 overflow-y-auto">
+			<div class="h-64 overflow-y-auto">
 				<ShuffledButtons
 					keys={gameState.tray}
 					onClick={onTrayButtonClick}
