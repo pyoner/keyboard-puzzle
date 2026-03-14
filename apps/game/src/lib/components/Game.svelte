@@ -44,7 +44,7 @@
 
 <div class="flex flex-col gap-8">
 	<!-- Stats Dashboard -->
-	<div class="stats w-full bg-base-200 shadow-lg">
+	<div class="stats w-full grid grid-cols-3 bg-base-200 shadow-lg">
 		<div class="stat place-items-center">
 			<div class="stat-title">Time Left</div>
 			<div class="stat-value text-primary">
