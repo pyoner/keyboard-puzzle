@@ -68,7 +68,7 @@
 	</div>
 
 	<!-- Main Keyboard Workmat -->
-	<div class="card overflow-hidden border-2 border-base-content/10 bg-base-300 shadow-xl">
+	<div class="card overflow-hidden border-2 border-base-content/10 bg-base-200 shadow-xl">
 		<div class="card-body p-2 sm:p-4">
 			<h2 class="mb-2 card-title justify-center text-sm tracking-widest uppercase opacity-50">
 				Keyboard Plate
