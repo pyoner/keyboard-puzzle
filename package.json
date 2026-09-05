@@ -1,14 +1,39 @@
 {
+  "name": "keyboard-puzzle-monorepo",
   "private": true,
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
-  "name": "keyboard-puzzle-monorepo",
+  "scripts": {
+    "prepare": "vp config"
+  },
+  "dependencies": {
+    "@vitest/browser-playwright": "catalog:"
+  },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "vite": "catalog:",
+    "vite-plus": "catalog:"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "overrides": {
+    "vite": "catalog:",
+    "vitest": "catalog:"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "bun",
+      "version": "1.4.1",
+      "onFail": "download"
+    }
+  },
+  "catalog": {
+    "@vitest/browser-playwright": "^5.0.0",
+    "vite": "npm:@voidzero-dev/vite-plus-core@0.3.0",
+    "vite-plus": "0.3.0",
+    "vitest": "4.1.11"
   }
 }
