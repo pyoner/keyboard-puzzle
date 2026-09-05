@@ -42,13 +42,11 @@
 	<div class="mt-4 flex justify-center gap-4">
 		<button class="btn btn-lg btn-primary" onclick={onPlayAgain}>Play Again</button>
 		<button class="btn btn-outline btn-lg" onclick={onReset}>Main Menu</button>
-		<!-- eslint-disable svelte/no-navigation-without-resolve -->
 		<a
 			href={shareOnTwitter(score)}
-			class="btn btn-lg btn-info"
+			class="btn btn-info btn-lg"
 			target="_blank"
 			rel="noopener noreferrer">Share on Twitter</a
 		>
-		<!-- eslint-enable svelte/no-navigation-without-resolve -->
 	</div>
 </div>

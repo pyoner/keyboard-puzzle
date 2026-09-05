@@ -12,12 +12,14 @@
     "@vitest/browser-playwright": "catalog:"
   },
   "devDependencies": {
-    "@types/bun": "latest",
+    "@types/bun": "^1.4.1",
+    "playwright": "^1.63.0",
     "vite": "catalog:",
-    "vite-plus": "catalog:"
+    "vite-plus": "catalog:",
+    "vitest": "catalog:"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.9.3"
   },
   "overrides": {
     "vite": "catalog:",
@@ -31,9 +33,9 @@
     }
   },
   "catalog": {
-    "@vitest/browser-playwright": "4.1.11",
+    "@vitest/browser-playwright": "5.0.0",
     "vite": "npm:@voidzero-dev/vite-plus-core@0.3.0",
     "vite-plus": "0.3.0",
-    "vitest": "4.1.11"
+    "vitest": "5.0.0"
   }
 }

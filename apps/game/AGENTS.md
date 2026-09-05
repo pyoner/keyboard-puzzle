@@ -32,7 +32,7 @@ vp run check:watch      # Watch mode for type checking
 ### Linting & Formatting
 
 ```bash
-vp run lint             # Prettier + ESLint check
+vp run lint             # Prettier + Oxlint check
 vp run format           # Auto-format with Prettier
 ```
 
@@ -77,11 +77,10 @@ vp run cf-typegen       # Generate Cloudflare types
 - **No trailing commas**
 - **Print width**: 100 characters
 
-### Linting (ESLint)
+### Linting (Oxlint)
 
-- Uses `typescript-eslint` with recommended rules
-- `eslint-plugin-svelte` for Svelte files
-- `eslint-config-prettier` to disable conflicting rules
+- Uses Oxlint through Vite+.
+- Prettier handles formatting and Tailwind class sorting.
 
 ### Tailwind CSS
 
@@ -269,7 +268,7 @@ const user = await db.query.users.findFirst({
 
 ## Imports
 
-### Order (ESLint/Prettier auto-sort)
+### Order
 
 1. Svelte/Kit imports
 2. External libraries

@@ -15,7 +15,7 @@ To recreate this project with the same configuration:
 
 ```sh
 # recreate this project
-bun x sv@0.12.4 create --template minimal --types ts --add prettier eslint vitest="usages:unit,component" playwright tailwindcss="plugins:typography,forms" sveltekit-adapter="adapter:cloudflare+cfTarget:workers" devtools-json drizzle="database:sqlite+sqlite:libsql" mcp="ide:opencode" --install bun game
+bun x sv@0.12.4 create --template minimal --types ts --add prettier vitest="usages:unit,component" playwright tailwindcss="plugins:typography,forms" sveltekit-adapter="adapter:cloudflare+cfTarget:workers" devtools-json drizzle="database:sqlite+sqlite:libsql" mcp="ide:opencode" --install bun game
 ```
 
 ## Developing

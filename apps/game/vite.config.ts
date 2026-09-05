@@ -6,6 +6,11 @@ import { sveltekit } from "@sveltejs/kit/vite";
 
 export default defineConfig({
   plugins: lazyPlugins(() => [tailwindcss(), sveltekit(), devtoolsJson()]),
+  lint: {
+    env: { browser: true, node: true },
+    ignorePatterns: ["src/worker-configuration.d.ts"],
+    rules: { "no-undef": "off" },
+  },
   test: {
     expect: { requireAssertions: true },
     projects: [
