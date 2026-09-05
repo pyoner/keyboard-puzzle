@@ -4,7 +4,7 @@
 </script>
 
 <div class="card bg-base-200 shadow-xl">
-	<div class="prose prose-sm card-body max-w-none md:prose-base">
+	<div class="card-body prose prose-sm max-w-none md:prose-base">
 		<h2 class="card-title">Welcome to the Keyboard Puzzle game!</h2>
 		<p>
 			The goal of this game is to restore the original order of the shuffled keyboard keys by

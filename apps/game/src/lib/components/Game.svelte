@@ -44,7 +44,7 @@
 
 <div class="flex flex-col gap-8">
 	<!-- Stats Dashboard -->
-	<div class="stats w-full grid grid-cols-3 bg-base-200 shadow-lg">
+	<div class="stats grid w-full grid-cols-3 bg-base-200 shadow-lg">
 		<div class="stat place-items-center">
 			<div class="stat-title">Time Left</div>
 			<div class="stat-value text-primary">
@@ -87,7 +87,7 @@
 			<div class="mb-2 flex items-center justify-between">
 				<h2 class="card-title text-sm tracking-widest uppercase opacity-50">Your Key Tray</h2>
 				<button
-					class="btn text-error btn-ghost btn-xs {gameState.selected ? '' : 'invisible'}"
+					class="btn btn-ghost text-error btn-xs {gameState.selected ? '' : 'invisible'}"
 					onclick={() => (gameState = { ...gameState, selected: null })}
 				>
 					Deselect

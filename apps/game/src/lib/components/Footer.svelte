@@ -1,5 +1,5 @@
 <!-- Footer.svelte -->
-<footer class="footer-center mt-8 footer bg-base-200 p-4 text-base-content">
+<footer class="mt-8 footer footer-center bg-base-200 p-4 text-base-content">
 	<div>
 		<div class="flex gap-4">
 			<a class="link link-hover" href="https://github.com/pyoner/keyboard-puzzle" target="_blank"

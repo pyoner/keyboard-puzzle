@@ -32,8 +32,8 @@ vp run check:watch      # Watch mode for type checking
 ### Linting & Formatting
 
 ```bash
-vp run lint             # Prettier + Oxlint check
-vp run format           # Auto-format with Prettier
+vp run lint             # Oxfmt + Oxlint check
+vp run format           # Auto-format with Oxfmt
 ```
 
 ### Testing
@@ -70,7 +70,7 @@ vp run cf-typegen       # Generate Cloudflare types
 
 ## Code Style
 
-### Formatting (Prettier)
+### Formatting (Oxfmt)
 
 - **Use tabs** for indentation
 - **Single quotes** for strings
@@ -80,13 +80,13 @@ vp run cf-typegen       # Generate Cloudflare types
 ### Linting (Oxlint)
 
 - Uses Oxlint through Vite+.
-- Prettier handles formatting and Tailwind class sorting.
+- Oxfmt handles formatting and Tailwind class sorting.
 
 ### Tailwind CSS
 
 - Uses Tailwind CSS v4 via `@tailwindcss/vite`
 - Import in `src/routes/layout.css`: `@import "tailwindcss"`
-- Use `prettier-plugin-tailwindcss` for class sorting
+- Oxfmt sorts Tailwind classes using `src/routes/layout.css`.
 
 ### daisyUI
 
