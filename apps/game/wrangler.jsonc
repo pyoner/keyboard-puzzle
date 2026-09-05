@@ -4,7 +4,7 @@
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "game",
+	"name": "keyboard-puzzle",
 	"main": ".svelte-kit/cloudflare/_worker.js",
 	"compatibility_date": "2026-03-10",
 	"compatibility_flags": ["nodejs_compat", "nodejs_als"],
