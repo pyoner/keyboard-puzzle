@@ -2,7 +2,15 @@ import { defineConfig } from "vite-plus";
 
 export default defineConfig({
   staged: {
-    "*": "vp check --fix",
+    "apps/game/**": "vp run check-game",
+  },
+  run: {
+    tasks: {
+      "check-game": {
+        command: ["vp exec --filter game -- oxfmt", "vp lint"],
+        cwd: "apps/game",
+      },
+    },
   },
   fmt: {},
   lint: {

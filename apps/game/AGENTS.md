@@ -122,7 +122,7 @@ let doubled = $derived(count * 2);
 
 // Effects
 $effect(() => {
-  console.log("Count changed:", count);
+	console.log('Count changed:', count);
 });
 
 // Resources (for async)
@@ -133,11 +133,11 @@ let data = $resource(fetchData());
 
 ```typescript
 let {
-  name = "default",
-  count = $bindable(),
+	name = 'default',
+	count = $bindable()
 }: {
-  name?: string;
-  count?: number;
+	name?: string;
+	count?: number;
 } = $props();
 ```
 
@@ -191,13 +191,13 @@ src/
 ### SvelteKit Load Functions
 
 ```typescript
-import { error } from "@sveltejs/kit";
+import { error } from '@sveltejs/kit';
 
 export function load() {
-  if (!data) {
-    throw error(404, "Not found");
-  }
-  return { data };
+	if (!data) {
+		throw error(404, 'Not found');
+	}
+	return { data };
 }
 ```
 
@@ -205,14 +205,14 @@ export function load() {
 
 ```typescript
 async function fetchUser(id: string) {
-  try {
-    const user = await db.query.users.findFirst({ where: eq(users.id, id) });
-    if (!user) throw error(404, "User not found");
-    return user;
-  } catch (e) {
-    console.error("Fetch failed:", e);
-    throw error(500, "Internal server error");
-  }
+	try {
+		const user = await db.query.users.findFirst({ where: eq(users.id, id) });
+		if (!user) throw error(404, 'User not found');
+		return user;
+	} catch (e) {
+		console.error('Fetch failed:', e);
+		throw error(500, 'Internal server error');
+	}
 }
 ```
 
@@ -227,16 +227,16 @@ async function fetchUser(id: string) {
 - Example:
 
 ```typescript
-import { render } from "vitest-browser-svelte";
-import { describe, expect, it } from "vitest";
-import Page from "./+page.svelte";
+import { render } from 'vitest-browser-svelte';
+import { describe, expect, it } from 'vitest';
+import Page from './+page.svelte';
 
-describe("/+page.svelte", () => {
-  it("should render h1", async () => {
-    render(Page);
-    const heading = page.getByRole("heading", { level: 1 });
-    await expect.element(heading).toBeInTheDocument();
-  });
+describe('/+page.svelte', () => {
+	it('should render h1', async () => {
+		render(Page);
+		const heading = page.getByRole('heading', { level: 1 });
+		await expect.element(heading).toBeInTheDocument();
+	});
 });
 ```
 
@@ -256,11 +256,11 @@ describe("/+page.svelte", () => {
 ### Common Patterns
 
 ```typescript
-import { eq } from "drizzle-orm";
-import { users } from "$lib/server/db/schema";
+import { eq } from 'drizzle-orm';
+import { users } from '$lib/server/db/schema';
 
 const user = await db.query.users.findFirst({
-  where: eq(users.id, userId),
+	where: eq(users.id, userId)
 });
 ```
 
@@ -276,12 +276,12 @@ const user = await db.query.users.findFirst({
 4. Relative imports
 
 ```typescript
-import { error } from "@sveltejs/kit";
-import { superValidate } from "sveltekit-superforms";
-import { db } from "$lib/server/db";
-import { users } from "$lib/server/db/schema";
-import { formatDate } from "$lib/shared/date";
-import "./local.css";
+import { error } from '@sveltejs/kit';
+import { superValidate } from 'sveltekit-superforms';
+import { db } from '$lib/server/db';
+import { users } from '$lib/server/db/schema';
+import { formatDate } from '$lib/shared/date';
+import './local.css';
 ```
 
 ---

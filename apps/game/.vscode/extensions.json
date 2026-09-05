@@ -1,7 +1,7 @@
 {
-  "recommendations": [
-    "svelte.svelte-vscode",
-    "voidzero.vite-plus-extension-pack",
-    "bradlc.vscode-tailwindcss"
-  ]
+	"recommendations": [
+		"svelte.svelte-vscode",
+		"voidzero.vite-plus-extension-pack",
+		"bradlc.vscode-tailwindcss"
+	]
 }
