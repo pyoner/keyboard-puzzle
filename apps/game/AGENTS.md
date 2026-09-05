@@ -3,7 +3,7 @@
 ## Project Configuration
 
 - **Language**: TypeScript
-- **Package Manager**: bun
+- **Toolchain CLI**: Vite+ (`vp`)
 - **Framework**: SvelteKit with Svelte 5
 - **Runtime**: Cloudflare Workers
 - **Database**: Drizzle ORM with libSQL
@@ -17,53 +17,53 @@
 ### Development
 
 ```bash
-bun run dev              # Start dev server
-bun run build           # Production build
-bun run preview          # Preview production build (wrangler dev)
+vp run dev              # Start dev server
+vp run build            # Production build
+vp run preview          # Preview production build (wrangler dev)
 ```
 
 ### Type Checking
 
 ```bash
-bun run check           # svelte-check (TS + Svelte types)
-bun run check:watch     # Watch mode for type checking
+vp run check            # svelte-check (TS + Svelte types)
+vp run check:watch      # Watch mode for type checking
 ```
 
 ### Linting & Formatting
 
 ```bash
-bun run lint            # Prettier + ESLint check
-bun run format          # Auto-format with Prettier
+vp run lint             # Prettier + ESLint check
+vp run format           # Auto-format with Prettier
 ```
 
 ### Testing
 
 ```bash
-bun run test            # Run all tests (unit + e2e)
-bun run test:unit       # Unit tests only (Vitest)
-bun run test:e2e        # E2E tests only (Playwright)
+vp run test             # Run all tests (unit + e2e)
+vp run test:unit        # Unit tests only (Vitest)
+vp run test:e2e         # E2E tests only (Playwright)
 
 # Run single test file
-bun run test:unit -- src/routes/page.svelte.spec.ts
+vp run test:unit -- src/routes/page.svelte.spec.ts
 
 # Run single test (via vitest filter)
-bun run test:unit -- --testNamePattern "should render"
+vp run test:unit -- --testNamePattern "should render"
 ```
 
 ### Database
 
 ```bash
-bun run db:push         # Push schema to database
-bun run db:generate     # Generate migrations
-bun run db:migrate      # Run migrations
-bun run db:studio       # Open Drizzle Studio
+vp run db:push          # Push schema to database
+vp run db:generate      # Generate migrations
+vp run db:migrate       # Run migrations
+vp run db:studio        # Open Drizzle Studio
 ```
 
 ### Deployment
 
 ```bash
-bun run deploy          # Deploy to Cloudflare
-bun run cf-typegen     # Generate Cloudflare types
+vp run deploy           # Deploy to Cloudflare
+vp run cf-typegen       # Generate Cloudflare types
 ```
 
 ---
@@ -123,7 +123,7 @@ let doubled = $derived(count * 2);
 
 // Effects
 $effect(() => {
-	console.log('Count changed:', count);
+  console.log("Count changed:", count);
 });
 
 // Resources (for async)
@@ -134,11 +134,11 @@ let data = $resource(fetchData());
 
 ```typescript
 let {
-	name = 'default',
-	count = $bindable()
+  name = "default",
+  count = $bindable(),
 }: {
-	name?: string;
-	count?: number;
+  name?: string;
+  count?: number;
 } = $props();
 ```
 
@@ -192,13 +192,13 @@ src/
 ### SvelteKit Load Functions
 
 ```typescript
-import { error } from '@sveltejs/kit';
+import { error } from "@sveltejs/kit";
 
 export function load() {
-	if (!data) {
-		throw error(404, 'Not found');
-	}
-	return { data };
+  if (!data) {
+    throw error(404, "Not found");
+  }
+  return { data };
 }
 ```
 
@@ -206,14 +206,14 @@ export function load() {
 
 ```typescript
 async function fetchUser(id: string) {
-	try {
-		const user = await db.query.users.findFirst({ where: eq(users.id, id) });
-		if (!user) throw error(404, 'User not found');
-		return user;
-	} catch (e) {
-		console.error('Fetch failed:', e);
-		throw error(500, 'Internal server error');
-	}
+  try {
+    const user = await db.query.users.findFirst({ where: eq(users.id, id) });
+    if (!user) throw error(404, "User not found");
+    return user;
+  } catch (e) {
+    console.error("Fetch failed:", e);
+    throw error(500, "Internal server error");
+  }
 }
 ```
 
@@ -228,22 +228,22 @@ async function fetchUser(id: string) {
 - Example:
 
 ```typescript
-import { render } from 'vitest-browser-svelte';
-import { describe, expect, it } from 'vitest';
-import Page from './+page.svelte';
+import { render } from "vitest-browser-svelte";
+import { describe, expect, it } from "vitest";
+import Page from "./+page.svelte";
 
-describe('/+page.svelte', () => {
-	it('should render h1', async () => {
-		render(Page);
-		const heading = page.getByRole('heading', { level: 1 });
-		await expect.element(heading).toBeInTheDocument();
-	});
+describe("/+page.svelte", () => {
+  it("should render h1", async () => {
+    render(Page);
+    const heading = page.getByRole("heading", { level: 1 });
+    await expect.element(heading).toBeInTheDocument();
+  });
 });
 ```
 
 ### E2E Tests (Playwright)
 
-- Run with: `bun run test:e2e`
+- Run with: `vp run test:e2e`
 - Configure browser in `playwright.config.ts`
 
 ---
@@ -257,11 +257,11 @@ describe('/+page.svelte', () => {
 ### Common Patterns
 
 ```typescript
-import { eq } from 'drizzle-orm';
-import { users } from '$lib/server/db/schema';
+import { eq } from "drizzle-orm";
+import { users } from "$lib/server/db/schema";
 
 const user = await db.query.users.findFirst({
-	where: eq(users.id, userId)
+  where: eq(users.id, userId),
 });
 ```
 
@@ -277,12 +277,12 @@ const user = await db.query.users.findFirst({
 4. Relative imports
 
 ```typescript
-import { error } from '@sveltejs/kit';
-import { superValidate } from 'sveltekit-superforms';
-import { db } from '$lib/server/db';
-import { users } from '$lib/server/db/schema';
-import { formatDate } from '$lib/shared/date';
-import './local.css';
+import { error } from "@sveltejs/kit";
+import { superValidate } from "sveltekit-superforms";
+import { db } from "$lib/server/db";
+import { users } from "$lib/server/db/schema";
+import { formatDate } from "$lib/shared/date";
+import "./local.css";
 ```
 
 ---
